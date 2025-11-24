@@ -1,0 +1,24 @@
+/* 1. Ambil Font Poppins dari Google */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Paksa seluruh aplikasi menggunakan Poppins */
+@layer base {
+  html {
+    font-family: 'Poppins', sans-serif;
+  }
+  body {
+    @apply bg-gray-50 text-gray-800; /* Tambahan biar background agak abu dikit gak silau */
+  }
+}
+/* Sembunyikan Scrollbar tapi tetap bisa discroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

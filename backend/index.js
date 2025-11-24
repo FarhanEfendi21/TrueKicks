@@ -1,4 +1,5 @@
 import express from "express";
+import serverless from 'serverless-http';
 import cors from "cors";
 import dotenv from "dotenv";
 import supabase from "./config/supabase.js";
@@ -6,7 +7,6 @@ import supabase from "./config/supabase.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -254,7 +254,4 @@ app.get('/api/sale', async (req, res) => {
     }
 });
 
-// === JALANKAN SERVER ===
-app.listen(PORT, () => {
-    console.log(`Server TrueKicks berjalan di http://localhost:${PORT}`);
-});
+export default serverless(app);

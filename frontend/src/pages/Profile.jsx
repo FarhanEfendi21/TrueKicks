@@ -11,17 +11,41 @@ export default function Profile() {
     localStorage.getItem('profileImage') || null
   );
   
-  // Ambil data user dari Local Storage
-  const user = JSON.parse(localStorage.getItem('user')) || {full_name: 'Guest', email: 'guest@truekicks.com'};
+  // 1. Ambil data user dari Local Storage
+  const storedUser = JSON.parse(localStorage.getItem('user'));
   
-  // State untuk form edit (hanya full_name yang bisa diedit)
+  // 2. Tentukan apakah user adalah Guest atau User asli
+  // Jika tidak ada data di localStorage, kita anggap Guest
+  const isGuest = !storedUser || storedUser.email === 'guest@truekicks.com' || storedUser.full_name === 'Guest';
+
+  // Data user yang akan ditampilkan (Fallback ke data Guest jika null)
+  const user = storedUser || { full_name: 'Guest', email: 'guest@truekicks.com' };
+  
+  // State untuk form edit
   const [editForm, setEditForm] = useState({
     full_name: user.full_name
   });
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("profileImage");
     navigate("/login");
+  };
+
+  // Handler khusus untuk Guest saat klik tombol "Keluar"
+  const handleGuestExit = () => {
+    handleLogout(); // Langsung keluar tanpa modal konfirmasi
+  };
+
+  // Handler untuk tombol aksi utama (Edit / Daftar)
+  const handleMainAction = () => {
+    if (isGuest) {
+        // Jika Guest, arahkan ke halaman login/register
+        navigate("/login"); 
+    } else {
+        // Jika User asli, buka modal edit
+        setShowEditModal(true);
+    }
   };
 
   // Get initials for avatar
@@ -34,7 +58,6 @@ export default function Profile() {
       .slice(0, 2);
   };
 
-  // Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -47,13 +70,11 @@ export default function Profile() {
     }
   };
 
-  // Remove profile image
   const removeProfileImage = () => {
     setProfileImage(null);
     localStorage.removeItem('profileImage');
   };
 
-  // Handle edit form change
   const handleEditChange = (e) => {
     setEditForm({
       ...editForm,
@@ -61,16 +82,13 @@ export default function Profile() {
     });
   };
 
-  // Save edited profile (hanya update full_name)
   const handleSaveProfile = () => {
     const updatedUser = {
       ...user,
       full_name: editForm.full_name
-      // email tetap tidak berubah
     };
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setShowEditModal(false);
-    // Reload untuk update tampilan
     window.location.reload();
   };
 
@@ -115,32 +133,39 @@ export default function Profile() {
                       )}
                     </div>
                     
-                    {/* Edit Overlay */}
-                    <label className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                    </label>
+                    {/* Edit Overlay (Hanya untuk User Asli) */}
+                    {!isGuest && (
+                        <label className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="hidden"
+                        />
+                        </label>
+                    )}
                   </div>
 
                   {/* User Info */}
                   <div className="flex-1">
                     <h2 className="text-2xl font-bold text-gray-900 mb-1">{user.full_name}</h2>
                     <p className="text-gray-600">{user.email}</p>
-                    {profileImage && (
+                    {!isGuest && profileImage && (
                       <button
                         onClick={removeProfileImage}
                         className="mt-2 text-sm text-red-600 hover:text-red-700 font-medium"
                       >
                         Remove Photo
                       </button>
+                    )}
+                    {isGuest && (
+                        <span className="mt-2 inline-block px-3 py-1 bg-orange-100 text-[#FF5500] text-xs font-bold rounded-full">
+                            Guest Mode
+                        </span>
                     )}
                   </div>
                 </div>
@@ -191,7 +216,9 @@ export default function Profile() {
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 font-medium">Member Since</p>
-                        <p className="text-base font-semibold text-gray-900">January 2024</p>
+                        <p className="text-base font-semibold text-gray-900">
+                            {isGuest ? "Visitor" : "January 2024"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -200,31 +227,49 @@ export default function Profile() {
 
               {/* Action Buttons */}
               <div className="p-8 bg-gray-50 border-t border-gray-100 space-y-3">
+                
+                {/* TOMBOL 1: EDIT (User) / DAFTAR (Guest) */}
                 <button 
-                  onClick={() => setShowEditModal(true)}
-                  className="w-full bg-gray-900 text-white py-3.5 rounded-xl font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                  onClick={handleMainAction}
+                  className={`w-full py-3.5 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2
+                    ${isGuest 
+                        ? "bg-[#FF5500] text-white hover:bg-orange-600 shadow-lg shadow-orange-200" 
+                        : "bg-gray-900 text-white hover:bg-gray-800"
+                    }`}
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                  Edit Profile
+                  {isGuest ? (
+                    <>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                        </svg>
+                        Daftar Member
+                    </>
+                  ) : (
+                    <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Profile
+                    </>
+                  )}
                 </button>
 
+                {/* TOMBOL 2: LOGOUT (User) / KELUAR (Guest) */}
                 <button
-                  onClick={() => setShowLogoutModal(true)}
+                  onClick={isGuest ? handleGuestExit : () => setShowLogoutModal(true)}
                   className="w-full bg-white text-gray-700 py-3.5 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  Logout
+                  {isGuest ? "Keluar" : "Logout"}
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Edit Profile Modal */}
+        {/* Edit Profile Modal (Hanya tampil jika showEditModal true, yg mana tidak akan true untuk Guest) */}
         {showEditModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 animate-fadeIn">
             <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
@@ -280,7 +325,7 @@ export default function Profile() {
           </div>
         )}
 
-        {/* Logout Modal */}
+        {/* Logout Modal (Hanya untuk User Asli) */}
         {showLogoutModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6 animate-fadeIn">
             <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">

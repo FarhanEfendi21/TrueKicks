@@ -1,89 +1,97 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useCart } from "../Context/CartContext"; 
+
+import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
 
-// --- DATA MENU CATALOG ---
+// ==================================================
+// DATA MENU CATALOG
+// ==================================================
 const catalogCategories = [
   {
     title: "Popular Brands",
-    items: ["Nike", "Adidas", "New Balance", "Puma", "Converse", "Vans", "Asics"]
+    items: ["Nike", "Adidas", "New Balance", "Puma", "Converse", "Vans", "Asics"],
   },
   {
     title: "Trending Models",
-    items: ["Air Jordan 1", "Salomon XT-6", "Adidas Samba", "New Balance 530", "Puma Speedcat", "Nike P-6000"]
+    items: [
+      "Air Jordan 1",
+      "Salomon XT-6",
+      "Adidas Samba",
+      "New Balance 530",
+      "Puma Speedcat",
+      "Nike P-6000",
+    ],
   },
   {
     title: "Categories",
-    items: ["Running", "Basketball", "Lifestyle", "Skateboarding", "Training", "Sandals"]
+    items: ["Running", "Basketball", "Lifestyle", "Skateboarding", "Training", "Sandals"],
   },
   {
     title: "Collections",
-    items: ["New Arrivals", "Best Sellers",  "Sale & Deals"]
-  }
+    items: ["New Arrivals", "Best Sellers", "Sale & Deals"],
+  },
 ];
 
+// ==================================================
+// NAVBAR COMPONENT
+// ==================================================
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  // HAPUS STATE isMobileMenuOpen KARENA TIDAK DIPAKAI LAGI
   const [showWishlist, setShowWishlist] = useState(false);
-  
-  const { wishlistItems, removeFromWishlist } = useWishlist(); 
-  const { totalItems } = useCart(); 
-  
   const [showSearch, setShowSearch] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
   const [showCatalog, setShowCatalog] = useState(false);
-  
-const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+
+  const { wishlistItems, removeFromWishlist } = useWishlist();
+  const { totalItems } = useCart();
 
   const navigate = useNavigate();
   const location = useLocation();
   const searchInputRef = useRef(null);
 
+  // -----------------------------------------------
+  // LOAD USER FROM LOCAL STORAGE
+  // -----------------------------------------------
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     const storedProfileImage = localStorage.getItem("profileImage");
-    
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (storedProfileImage) {
-      setProfileImage(storedProfileImage);
-    }
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedProfileImage) setProfileImage(storedProfileImage);
+
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // -----------------------------------------------
+  // AUTO FOCUS SEARCH
+  // -----------------------------------------------
   useEffect(() => {
     if (showSearch && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [showSearch]);
 
-useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setShowCatalog(false);
-  }, [location]);
-
+  // -----------------------------------------------
+  // FUNCTIONS
+  // -----------------------------------------------
   const handleLogout = () => {
-    localStorage.removeItem("user"); 
-    setUser(null); 
-    navigate("/login"); 
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
   };
 
   const handleSearchSubmit = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
-      navigate('/sneakers', { state: { keyword: searchTerm } }); 
-      setShowSearch(false); 
+      navigate("/sneakers", { state: { keyword: searchTerm } });
+      setShowSearch(false);
     }
   };
 
@@ -94,150 +102,209 @@ useEffect(() => {
 
   const getInitials = (name) => {
     if (!name) return "U";
-    return name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 2);
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
-  const isActive = (path) => location.pathname === path ? "text-[#FF5500] font-bold" : "text-gray-600 hover:text-black";
+  const isActive = (path) =>
+    location.pathname === path
+      ? "text-[#FF5500] font-bold"
+      : "text-gray-600 hover:text-black";
 
+  // ==================================================
+  // RENDER
+  // ==================================================
   return (
     <>
-      <nav 
+      <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-poppins ${
-          isScrolled || showCatalog || isMobileMenuOpen
-            ? "bg-white/90 backdrop-blur-md shadow-sm py-3" 
+          isScrolled || showCatalog
+            ? "bg-white/90 backdrop-blur-md shadow-sm py-3"
             : "bg-transparent py-5"
         }`}
         onMouseLeave={() => setShowCatalog(false)}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          
-          {/* 1. LOGO */}
-          <div className="flex items-center gap-4 z-50">
-            <button 
-              className="xl:hidden text-gray-800 p-1 hover:bg-gray-100 rounded-lg transition-colors"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
+          {/* ==================================================
+             LOGO
+          ================================================== */}
+          <div className="flex-shrink-0 z-20">
+            <Link
+              to="/home"
+              className={`flex items-center gap-2 group ${
+                showSearch ? "hidden md:flex" : "flex"
+              }`}
             >
-              {isMobileMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-              )}
-            </button>
-
-            <Link to="/home" className={`flex items-center gap-2 group ${showSearch ? 'hidden md:flex' : 'flex'}`}>
               <h1 className="text-2xl md:text-3xl font-black italic tracking-tighter select-none">
-                <span className="text-gray-900 group-hover:text-black transition-colors">TRUE</span>
+                <span className="text-gray-900 group-hover:text-black transition-colors">
+                  TRUE
+                </span>
                 <span className="text-[#FF5500]">KICKS</span>
               </h1>
             </Link>
           </div>
 
-          {/* 2. MENU TENGAH (DESKTOP ONLY) */}
+          {/* ==================================================
+             SEARCH BAR OR MENU (CENTER)
+          ================================================== */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
             {showSearch ? (
               <div className="relative w-[200px] md:w-[500px] animate-fade-in">
-                <input 
+                <input
                   ref={searchInputRef}
-                  type="text" 
-                  placeholder="Search sneakers..." 
-                  className="w-full bg-gray-100 text-gray-800 px-5 py-2.5 rounded-full outline-none focus:ring-2 focus:ring-orange-500/50 transition-all text-sm"
+                  type="text"
+                  placeholder="Search sneakers..."
+                  className="w-full bg-gray-100 text-gray-800 px-5 py-2.5 rounded-full outline-none 
+                             focus:ring-2 focus:ring-orange-500/50 transition-all text-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyDown={handleSearchSubmit}
                 />
-                <button 
+
+                <button
                   onClick={() => setShowSearch(false)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 p-1"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  ✕
                 </button>
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-8 text-sm font-bold tracking-wide">
-                <Link to="/home" className={`${isActive('/home')} transition-transform hover:scale-105`}>HOME</Link>
-                
-                {/* CATALOG TRIGGER */}
-                <div 
+                <Link to="/home" className={`${isActive("/home")} hover:scale-105 transition-transform`}>
+                  HOME
+                </Link>
+
+                {/* CATALOG MENU */}
+                <div
                   className="relative h-full flex items-center cursor-default"
                   onMouseEnter={() => setShowCatalog(true)}
                 >
-                  <div className={`flex items-center gap-1 transition-colors cursor-pointer ${showCatalog ? 'text-black' : 'text-gray-600 hover:text-black'}`}>
+                  <div
+                    className={`flex items-center gap-1 cursor-pointer transition-colors ${
+                      showCatalog ? "text-black" : "text-gray-600 hover:text-black"
+                    }`}
+                  >
                     CATALOG
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-3 h-3 transition-transform duration-300 ${showCatalog ? 'rotate-180' : ''}`}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    <svg
+                      className={`w-3 h-3 transition-transform duration-300 ${
+                        showCatalog ? "rotate-180" : ""
+                      }`}
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                     </svg>
                   </div>
                 </div>
 
-                <Link to="/sneakers" className={`${isActive('/sneakers')} transition-transform hover:scale-105`}>SNEAKERS</Link>
-                <Link to="/apparel" className={`${isActive('/apparel')} transition-transform hover:scale-105`}>APPAREL</Link>
-                <Link to="/sale" className="text-red-500 font-bold hover:text-red-600 transition-transform hover:scale-105">SALE</Link>
+                <Link to="/sneakers" className={`${isActive("/sneakers")} hover:scale-105 transition-transform`}>
+                  SNEAKERS
+                </Link>
+
+                <Link to="/apparel" className={`${isActive("/apparel")} hover:scale-105 transition-transform`}>
+                  APPAREL
+                </Link>
+
+                <Link
+                  to="/sale"
+                  className="text-red-500 font-bold hover:text-red-600 hover:scale-105 transition-transform"
+                >
+                  SALE
+                </Link>
               </div>
             )}
           </div>
 
-          {/* 3. ACTIONS KANAN */}
+          {/* ==================================================
+             ACTION BUTTONS (RIGHT)
+          ================================================== */}
           <div className="flex items-center gap-3 md:gap-5 flex-shrink-0 z-20">
+            {/* SEARCH BUTTON */}
             {!showSearch && (
               <button onClick={() => setShowSearch(true)} className="p-2 rounded-full hover:bg-black/5 transition-colors text-gray-600">
+
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+
                 </svg>
+
               </button>
+
+
             )}
 
             {/* WISHLIST BUTTON */}
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setShowWishlist(!showWishlist)}
-                className="p-2 rounded-full hover:bg-black/5 transition-colors text-gray-600 relative"
+                className="p-2 rounded-full hover:bg-black/5 text-gray-600 transition relative"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                </svg>
+                🤍
                 {wishlistItems.length > 0 && (
-                  <span className="absolute top-1 right-0 bg-red-500 text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border border-white">
+                  <span className="absolute top-1 right-0 bg-red-500 text-white text-[9px] w-4 h-4 
+                                   rounded-full flex items-center justify-center border border-white">
                     {wishlistItems.length}
                   </span>
                 )}
               </button>
 
-              {/* FLOATING DROPDOWN WISHLIST */}
+              {/* WISHLIST DROPDOWN */}
               {showWishlist && (
-                <div className="absolute top-full right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 animate-fade-in origin-top-right">
-                  <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-                    <h3 className="font-bold text-gray-900">My Wishlist ({wishlistItems.length})</h3>
-                    <button onClick={() => setShowWishlist(false)} className="text-gray-400 hover:text-black">✕</button>
+                <div className="absolute top-full right-0 mt-4 w-80 bg-white rounded-2xl shadow-2xl
+                                border border-gray-100 overflow-hidden z-50 animate-fade-in">
+                  <div className="p-4 border-b flex justify-between items-center">
+                    <h3 className="font-bold text-gray-900">
+                      My Wishlist ({wishlistItems.length})
+                    </h3>
+
+                    <button
+                      onClick={() => setShowWishlist(false)}
+                      className="text-gray-400 hover:text-black"
+                    >
+                      ✕
+                    </button>
                   </div>
-                  
+
                   <div className="max-h-[300px] overflow-y-auto p-2 space-y-2">
                     {wishlistItems.length === 0 ? (
                       <div className="text-center py-8 text-gray-400 text-xs">
-                        Your wishlist is empty. <br/> Start loving some shoes!
+                        Your wishlist is empty. <br /> Start loving some shoes!
                       </div>
                     ) : (
                       wishlistItems.map((item) => (
-                        <div key={item.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-xl transition-colors group">
-                          <div className="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                             <img src={item.image} className="w-[90%] mix-blend-multiply" alt={item.name} />
+                        <div
+                          key={item.id}
+                          className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 group"
+                        >
+                          <div className="w-14 h-14 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                            <img src={item.image} alt={item.name} className="w-[90%] mix-blend-multiply" />
                           </div>
-                          <div className="flex-grow min-w-0 cursor-pointer" onClick={() => { handleWishlistNav(`/product/sneakers/${item.id}`); }}>
-                             <p className="text-xs font-bold text-gray-900 truncate">{item.name}</p>
-                             <p className="text-xs text-gray-500">Rp {(item.price / 1000).toLocaleString()}K</p>
-                          </div>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); removeFromWishlist(item.id); }}
-                            className="p-2 text-gray-300 hover:text-red-500 transition-colors"
+
+                          <div
+                            className="flex-grow min-w-0 cursor-pointer"
+                            onClick={() => handleWishlistNav(`/product/sneakers/${item.id}`)}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                              <path fillRule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.636-1.452zM12.75 9.75a.75.75 0 10-1.5 0v8.625a.75.75 0 101.5 0V9.75zm-3.375 0a.75.75 0 10-1.5 0v8.625a.75.75 0 101.5 0V9.75zm6.75 0a.75.75 0 10-1.5 0v8.625a.75.75 0 101.5 0V9.75z" clipRule="evenodd" />
-                            </svg>
+                            <p className="text-xs font-bold text-gray-900 truncate">{item.name}</p>
+                            <p className="text-xs text-gray-500">
+                              Rp {(item.price / 1000).toLocaleString()}K
+                            </p>
+                          </div>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeFromWishlist(item.id);
+                            }}
+                            className="p-2 text-gray-300 hover:text-red-500 transition"
+                          >
+                            🗑️
                           </button>
                         </div>
                       ))
@@ -247,68 +314,79 @@ useEffect(() => {
               )}
             </div>
 
-            {/* CART BUTTON */}
-            <button 
-              onClick={() => navigate('/cart')} 
-              className="hidden md:block p-2 rounded-full hover:bg-black/5 transition-colors text-gray-600 relative"
+            {/* CART */}
+            <button
+              onClick={() => navigate("/cart")}
+              className="hidden md:block p-2 rounded-full hover:bg-black/5 text-gray-600 relative transition"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-              </svg>
+              🛒
               {totalItems > 0 && (
-                <span className="absolute top-1 right-0 bg-[#FF5500] text-white text-[9px] font-bold w-4 h-4 flex items-center justify-center rounded-full border border-white shadow-sm animate-bounce-in">
+                <span className="absolute top-1 right-0 bg-[#FF5500] text-white text-[9px] w-4 h-4 
+                                 rounded-full flex items-center justify-center border border-white">
                   {totalItems}
                 </span>
               )}
             </button>
-            
 
-            {/* USER ACTIONS */}
+            {/* USER */}
             {user ? (
               <div className="hidden md:flex items-center gap-3">
-                <Link to="/profile" className="group flex items-center gap-2.5 hover:bg-gray-50 rounded-full pr-3 py-1 transition-all duration-300">
+                <Link
+                  to="/profile"
+                  className="group flex items-center gap-2.5 hover:bg-gray-50 rounded-full pr-3 py-1 transition"
+                >
+                  {/* Profile Picture Circle */}
                   <div className="relative">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF5500] to-orange-600 flex items-center justify-center text-white text-sm font-bold overflow-hidden ring-2 ring-white shadow-md group-hover:ring-[#FF5500] transition-all duration-300">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF5500] to-orange-600 
+                                    flex items-center justify-center text-white text-sm font-bold shadow-md 
+                                    ring-2 ring-white overflow-hidden">
                       {profileImage ? (
-                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                        <img src={profileImage} className="w-full h-full object-cover" />
                       ) : (
                         getInitials(user.full_name)
                       )}
                     </div>
-                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div>
+
+                    {/* Online Indicator */}
+                    <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
                   </div>
+
                   <div className="hidden lg:block text-left">
-                    <p className="text-[10px] text-gray-500 font-medium leading-none mb-0.5">Hi,</p>
-                    <p className="text-xs font-bold text-gray-900 leading-none group-hover:text-[#FF5500] transition-colors">
+                    <p className="text-[10px] text-gray-500 leading-none">Hi,</p>
+                    <p className="text-xs font-bold text-gray-900 group-hover:text-[#FF5500] transition">
                       {user.full_name?.split(" ")[0] || "User"}
                     </p>
                   </div>
                 </Link>
 
-                <button 
-                  onClick={handleLogout} 
-                  className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full font-semibold text-xs uppercase tracking-wider hover:bg-gray-800 hover:shadow-lg transition-all duration-300 active:scale-95"
+                {/* Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full 
+                             font-semibold text-xs uppercase tracking-wider hover:bg-gray-800 transition active:scale-95"
                 >
                   Logout
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                  </svg>
                 </button>
               </div>
             ) : (
-              <button onClick={() => navigate('/login')} className="hidden md:flex items-center gap-2 bg-black text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-gray-800 hover:shadow-lg transition-all duration-300 active:scale-95">
+              <button
+                onClick={() => navigate("/login")}
+                className="hidden md:flex items-center gap-2 bg-black text-white px-6 py-2.5 rounded-full 
+                           font-bold text-sm hover:bg-gray-800 transition active:scale-95"
+              >
                 Log In
               </button>
             )}
           </div>
         </div>
 
-        {/* MEGA MENU (TETAP ADA UNTUK DESKTOP) */}
+        {/* ==================================================
+           MEGA MENU CATALOG
+        ================================================== */}
         {showCatalog && (
-          <div 
-            className={`absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 overflow-hidden transition-all duration-300 origin-top ${
-              showCatalog ? "opacity-100 max-h-[500px] visible" : "opacity-0 max-h-0 invisible"
-            }`}
+          <div
+            className="absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100
+                       overflow-hidden transition-all duration-300 origin-top"
             onMouseEnter={() => setShowCatalog(true)}
             onMouseLeave={() => setShowCatalog(false)}
           >
@@ -319,36 +397,31 @@ useEffect(() => {
                     <h3 className="font-black text-gray-900 text-sm uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">
                       {category.title}
                     </h3>
+
                     <ul className="space-y-2.5">
                       {category.items.map((item, idx) => {
-                        
                         let targetPath = "/sneakers";
                         let stateData = null;
 
                         if (category.title === "Collections") {
-                             if (item === "Sale & Deals") {
-                                targetPath = "/sale";
-                             } else if (item === "New Arrivals") {
-                                targetPath = "/home";
-                                stateData = { scrollTo: "new-arrivals" };
-                             } else if (item === "Best Sellers") {
-                                targetPath = "/home";
-                                stateData = { scrollTo: "best-sellers" };
-                             }
+                          if (item === "Sale & Deals") targetPath = "/sale";
+                          else if (item === "New Arrivals")
+                            stateData = { scrollTo: "new-arrivals" };
+                          else if (item === "Best Sellers")
+                            stateData = { scrollTo: "best-sellers" };
                         } else {
-                            // === PENGGUNAAN 'typeFilter' ATAU 'keyword' SEPERTI DIMINTA ===
-                            const stateKey = category.title === "Categories" ? "typeFilter" : "keyword";
-                            
-                            stateData = { [stateKey]: item };
+                          const stateKey =
+                            category.title === "Categories" ? "typeFilter" : "keyword";
+                          stateData = { [stateKey]: item };
                         }
-            
+
                         return (
                           <li key={idx}>
-                            <Link 
-                              to={targetPath} 
-                              state={stateData} // Sekarang 'stateData' sudah didefinisikan dengan betul
+                            <Link
+                              to={targetPath}
+                              state={stateData}
                               onClick={() => setShowCatalog(false)}
-                              className="text-gray-500 hover:text-[#FF5500] hover:translate-x-1 transition-all duration-200 inline-block text-sm font-medium"
+                              className="text-gray-500 hover:text-[#FF5500] transition text-sm font-medium"
                             >
                               {item}
                             </Link>
@@ -362,64 +435,6 @@ useEffect(() => {
             </div>
           </div>
         )}
-        
-      {/* === MOBILE MENU DRAWER (SLIDE DOWN) === */}
-        <div className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-[500px] opacity-100 mt-4 border-t pt-4' : 'max-h-0 opacity-0'}`}>
-           <div className="flex flex-col gap-4 text-sm font-bold text-gray-700">
-              <Link to="/home" className="p-2 hover:bg-gray-50 rounded-lg">HOME</Link>
-              
-              {/* Mobile Catalog Accordion */}
-              <div>
-                 <button onClick={() => setShowCatalog(!showCatalog)} className="w-full text-left p-2 flex justify-between items-center hover:bg-gray-50 rounded-lg">
-                    CATALOG
-                    <span className={`transform transition-transform ${showCatalog ? 'rotate-180' : ''}`}>▼</span>
-                 </button>
-                 {showCatalog && (
-                    <div className="pl-4 py-2 space-y-3 bg-gray-50/50 rounded-lg mt-1">
-                       {catalogCategories.map((cat, idx) => (
-                          <div key={idx}>
-                             <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">{cat.title}</p>
-                             <div className="flex flex-col gap-2 pl-2 border-l-2 border-gray-200">
-                                {cat.items.map((item, i) => (
-                                   <Link 
-                                     key={i} 
-                                     to="/sneakers" 
-                                     state={{ keyword: item }}
-                                     className="text-gray-600 font-medium text-xs"
-                                   >
-                                     {item}
-                                   </Link>
-                                ))}
-                             </div>
-                          </div>
-                       ))}
-                    </div>
-                 )}
-              </div>
-
-              <Link to="/sneakers" className="p-2 hover:bg-gray-50 rounded-lg">SNEAKERS</Link>
-              <Link to="/apparel" className="p-2 hover:bg-gray-50 rounded-lg">APPAREL</Link>
-              <Link to="/sale" className="p-2 text-red-500 hover:bg-red-50 rounded-lg">SALE</Link>
-              
-              <div className="h-px bg-gray-100 my-1"></div>
-              
-              {/* Mobile User Actions */}
-              {user ? (
-                 <div className="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
-                    <div className="flex items-center gap-3">
-                       <div className="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">
-                          {getInitials(user.full_name)}
-                       </div>
-                       <span className="truncate max-w-[150px]">{user.full_name}</span>
-                    </div>
-                    <button onClick={handleLogout} className="text-xs text-red-500 font-bold border border-red-200 px-3 py-1 rounded-full">LOGOUT</button>
-                 </div>
-              ) : (
-                 <button onClick={() => navigate('/login')} className="w-full bg-black text-white py-3 rounded-xl font-bold">LOGIN / REGISTER</button>
-              )}
-           </div>
-        </div>
-
       </nav>
     </>
   );

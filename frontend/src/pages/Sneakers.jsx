@@ -35,6 +35,10 @@ export default function Sneakers() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 16; 
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]); 
+
   // --- FUNGSI UTAMA UNTUK FILTERING SIMULTAN ---
   const applyFilter = (list, keyword, brand, shoeType) => {
     let result = list;

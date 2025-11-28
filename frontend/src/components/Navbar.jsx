@@ -7,11 +7,11 @@ import { useWishlist } from "../Context/WishlistContext";
 const catalogCategories = [
   {
     title: "Popular Brands",
-    items: ["Nike", "Adidas", "New Balance", "Puma", "Converse", "Vans", "Asics", "Reebok"]
+    items: ["Nike", "Adidas", "New Balance", "Puma", "Converse", "Vans", "Asics"]
   },
   {
     title: "Trending Models",
-    items: ["Air Jordan 1", "Nike Dunk Low", "Adidas Samba", "New Balance 530", "Yeezy Slide", "Nike P-6000"]
+    items: ["Air Jordan 1", "Salomon XT-6", "Adidas Samba", "New Balance 530", "Puma Speedcat", "Nike P-6000"]
   },
   {
     title: "Categories",
@@ -19,7 +19,7 @@ const catalogCategories = [
   },
   {
     title: "Collections",
-    items: ["New Arrivals", "Best Sellers", "Upcoming Releases", "Member Exclusives", "Sale & Deals"]
+    items: ["New Arrivals", "Best Sellers",  "Sale & Deals"]
   }
 ];
 
@@ -278,8 +278,6 @@ export default function Navbar() {
                 Log In
               </button>
             )}
-
-            {/* --- HAMBURGER MENU DIHAPUS ---*/}
           </div>
         </div>
 
@@ -301,13 +299,32 @@ export default function Navbar() {
                     </h3>
                     <ul className="space-y-2.5">
                       {category.items.map((item, idx) => {
-                        const targetPath = category.title === "Categories" ? "/sneakers" : "/catalog";
-                        const stateKey = category.title === "Categories" ? "typeFilter" : "keyword";
+                        
+                        let targetPath = "/sneakers";
+                        let stateData = null;
+
+                        if (category.title === "Collections") {
+                             if (item === "Sale & Deals") {
+                                targetPath = "/sale";
+                             } else if (item === "New Arrivals") {
+                                targetPath = "/home";
+                                stateData = { scrollTo: "new-arrivals" };
+                             } else if (item === "Best Sellers") {
+                                targetPath = "/home";
+                                stateData = { scrollTo: "best-sellers" };
+                             }
+                        } else {
+                            // === PENGGUNAAN 'typeFilter' ATAU 'keyword' SEPERTI DIMINTA ===
+                            const stateKey = category.title === "Categories" ? "typeFilter" : "keyword";
+                            
+                            stateData = { [stateKey]: item };
+                        }
+            
                         return (
                           <li key={idx}>
                             <Link 
                               to={targetPath} 
-                              state={{ [stateKey]: item }} 
+                              state={stateData} // Sekarang 'stateData' sudah didefinisikan dengan betul
                               onClick={() => setShowCatalog(false)}
                               className="text-gray-500 hover:text-[#FF5500] hover:translate-x-1 transition-all duration-200 inline-block text-sm font-medium"
                             >

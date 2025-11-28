@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom"; //
+import { useNavigate, useLocation } from "react-router-dom"; //
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -45,10 +45,7 @@ const useScrollAnimation = (options = {}) => {
   return [elementRef, isVisible];
 };
 
-// ========== NEW: COMPONENT ANIMATED IMAGE ==========
-// Komponen ini membungkus logika animasi agar bisa dipakai berulang kali
 const AnimatedImage = ({ src, alt, className }) => {
-  // Threshold 0.2 artinya animasi mulai saat 20% gambar muncul di layar
   const [ref, isVisible] = useScrollAnimation({ threshold: 0.2 });
 
   return (
@@ -114,6 +111,24 @@ useEffect(() => {
       }
     }
   };
+
+useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      const elemId = location.state.scrollTo;
+      const element = document.getElementById(elemId);
+      
+      if (element) {
+        // Beri sedikit delay agar halaman selesai render sepenuhnya
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+        
+        // Opsional: Bersihkan state agar kalau di-refresh tidak scroll lagi (tergantung preferensi)
+        // window.history.replaceState({}, document.title) 
+      }
+    }
+  }, [location]);
+
 
   // Fungsi Scroll ke Section Tertentu
   const scrollToSection = (ref) => {
@@ -364,7 +379,11 @@ useEffect(() => {
       {/* ===========================
           3. OUR TOP PICKS (Carousel) - MODERN SPOTLIGHT STYLE
          =========================== */}
-      <section ref={topPicksRef} className="max-w-7xl mx-auto px-6 py-24 scroll-mt-24 relative">
+      <section 
+        id="best-sellers"  
+        ref={topPicksRef} 
+        className="max-w-7xl mx-auto px-6 py-24 scroll-mt-32 relative" // <--- TAMBAH scroll-mt-32
+>
         
         {/* Decorative Background Blob (Optional, subtle behind the section) */}
         <div className="absolute top-1/2 left-0 w-96 h-96 bg-orange-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-y-1/2 -z-10"></div>
@@ -486,9 +505,12 @@ useEffect(() => {
       {/* ===========================
           4. NEW ARRIVALS - MODERN FRESH STYLE
          =========================== */}
-      <section className="max-w-7xl mx-auto px-6 mb-24">
+      <section 
+  id="new-arrivals" 
+  className="max-w-7xl mx-auto px-6 mb-24 scroll-mt-32" 
+>
         {/* Header dengan dekorasi modern */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div  className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="relative flex h-3 w-3">
@@ -509,10 +531,7 @@ useEffect(() => {
              <p className="col-span-4 text-center py-20 text-gray-400 animate-pulse">Fetching latest drops...</p>
            ) : (
              newArrivals.map((item) => (
-               
-               /* === UPDATE DI SINI === 
-                  Menambahkan onClick dan cursor-pointer 
-               */
+
                <div 
                  key={item.id} 
                  onClick={() => navigate(`/product/products/${item.id}`)}

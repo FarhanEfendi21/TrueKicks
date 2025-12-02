@@ -7,7 +7,7 @@ import { useCart } from "../Context/CartContext.jsx";
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
   const navigate = useNavigate();
-  const [isUpdating, setIsUpdating] = useState(false); // State untuk efek loading saat update qty
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);

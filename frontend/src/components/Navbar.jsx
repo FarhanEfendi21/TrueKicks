@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useCart } from "../Context/CartContext";
@@ -39,10 +39,8 @@ const catalogCategories = [
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
   const [showCatalog, setShowCatalog] = useState(false);
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
 
@@ -51,7 +49,6 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const searchInputRef = useRef(null);
 
   // -----------------------------------------------
   // LOAD USER FROM LOCAL STORAGE
@@ -70,29 +67,12 @@ export default function Navbar() {
   }, []);
 
   // -----------------------------------------------
-  // AUTO FOCUS SEARCH
-  // -----------------------------------------------
-  useEffect(() => {
-    if (showSearch && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [showSearch]);
-
-  // -----------------------------------------------
   // FUNCTIONS
   // -----------------------------------------------
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
     navigate("/login");
-  };
-
-  const handleSearchSubmit = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      navigate("/sneakers", { state: { keyword: searchTerm } });
-      setShowSearch(false);
-    }
   };
 
   const handleWishlistNav = (path) => {
@@ -135,9 +115,7 @@ export default function Navbar() {
           <div className="flex-shrink-0 z-20">
             <Link
               to="/home"
-              className={`flex items-center gap-2 group ${
-                showSearch ? "hidden md:flex" : "flex"
-              }`}
+              className="flex items-center gap-2 group"
             >
               <h1 className="text-2xl md:text-3xl font-black italic tracking-tighter select-none">
                 <span className="text-gray-900 group-hover:text-black transition-colors">
@@ -149,97 +127,60 @@ export default function Navbar() {
           </div>
 
           {/* ==================================================
-             SEARCH BAR OR MENU (CENTER)
+             MENU (CENTER)
           ================================================== */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-            {showSearch ? (
-              <div className="relative w-[200px] md:w-[500px] animate-fade-in">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  placeholder="Search sneakers..."
-                  className="w-full bg-gray-100 text-gray-800 px-5 py-2.5 rounded-full outline-none 
-                             focus:ring-2 focus:ring-orange-500/50 transition-all text-sm"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={handleSearchSubmit}
-                />
+            <div className="hidden md:flex items-center gap-8 text-sm font-bold tracking-wide">
+              <Link to="/home" className={`${isActive("/home")} hover:scale-105 transition-transform`}>
+                HOME
+              </Link>
 
-                <button
-                  onClick={() => setShowSearch(false)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 p-1"
-                >
-                  ✕
-                </button>
-              </div>
-            ) : (
-              <div className="hidden md:flex items-center gap-8 text-sm font-bold tracking-wide">
-                <Link to="/home" className={`${isActive("/home")} hover:scale-105 transition-transform`}>
-                  HOME
-                </Link>
-
-                {/* CATALOG MENU */}
+              {/* CATALOG MENU */}
+              <div
+                className="relative h-full flex items-center cursor-default"
+                onMouseEnter={() => setShowCatalog(true)}
+              >
                 <div
-                  className="relative h-full flex items-center cursor-default"
-                  onMouseEnter={() => setShowCatalog(true)}
+                  className={`flex items-center gap-1 cursor-pointer transition-colors ${
+                    showCatalog ? "text-black" : "text-gray-600 hover:text-black"
+                  }`}
                 >
-                  <div
-                    className={`flex items-center gap-1 cursor-pointer transition-colors ${
-                      showCatalog ? "text-black" : "text-gray-600 hover:text-black"
+                  CATALOG
+                  <svg
+                    className={`w-3 h-3 transition-transform duration-300 ${
+                      showCatalog ? "rotate-180" : ""
                     }`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
                   >
-                    CATALOG
-                    <svg
-                      className={`w-3 h-3 transition-transform duration-300 ${
-                        showCatalog ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-                  </div>
+                    <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
                 </div>
-
-                <Link to="/sneakers" className={`${isActive("/sneakers")} hover:scale-105 transition-transform`}>
-                  SNEAKERS
-                </Link>
-
-                <Link to="/apparel" className={`${isActive("/apparel")} hover:scale-105 transition-transform`}>
-                  APPAREL
-                </Link>
-
-                <Link
-                  to="/sale"
-                  className="text-red-500 font-bold hover:text-red-600 hover:scale-105 transition-transform"
-                >
-                  SALE
-                </Link>
               </div>
-            )}
+
+              <Link to="/sneakers" className={`${isActive("/sneakers")} hover:scale-105 transition-transform`}>
+                SNEAKERS
+              </Link>
+
+              <Link to="/apparel" className={`${isActive("/apparel")} hover:scale-105 transition-transform`}>
+                APPAREL
+              </Link>
+
+              <Link
+                to="/sale"
+                className="text-red-500 font-bold hover:text-red-600 hover:scale-105 transition-transform"
+              >
+                SALE
+              </Link>
+            </div>
           </div>
 
           {/* ==================================================
              ACTION BUTTONS (RIGHT)
           ================================================== */}
           <div className="flex items-center gap-3 md:gap-5 flex-shrink-0 z-20">
-            {/* SEARCH BUTTON */}
-            {!showSearch && (
-              <button onClick={() => setShowSearch(true)} className="p-2 rounded-full hover:bg-black/5 transition-colors text-gray-600">
-
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-
-                </svg>
-
-              </button>
-
-
-            )}
-
             {/* WISHLIST BUTTON */}
             <div className="relative">
               <button

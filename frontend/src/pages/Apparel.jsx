@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ApparelBanner from "../components/ApparelBanner";
 
 // =========================================
 // 1. CUSTOM HOOK: SCROLL ANIMATION
@@ -196,38 +197,8 @@ export default function Apparel() {
       <Navbar />
 
       <div className="pt-32 pb-20 max-w-7xl mx-auto px-6">
-        {/* ========================================================
-            MODERN SIMPLE BANNER - APPAREL
-        ======================================================== */}
-        <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl md:rounded-3xl p-8 md:p-14 mb-6 md:mb-10 text-center overflow-hidden">
-          {/* Gradient Accent Line - Top */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
-
-          {/* Subtle Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          {/* Content */}
-          <div className="relative z-10">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 px-4 py-1.5 rounded-full mb-4 md:mb-5">
-              <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse"></div>
-              <span className="text-cyan-400 font-semibold text-[11px] md:text-xs tracking-wider uppercase">Streetwear Essentials</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-3 md:mb-4 tracking-tight">
-              TRENDING <span className="text-cyan-400">APPAREL</span>
-            </h1>
-
-            {/* Description */}
-            <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-              Elevate your style with hoodies, tees & jackets from top brands.
-            </p>
-          </div>
-
-          {/* Gradient Accent Line - Bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
-        </div>
+        {/* TRUEKICKS BANNER - BACK IN BLACK STYLE */}
+        <ApparelBanner />
 
         {/* 1. CONTAINER UTAMA (Compact Spacing) */}
         <div className="lg:col-span-3 mb-4 lg:mb-8">
@@ -239,8 +210,8 @@ export default function Apparel() {
             >
               <div
                 className={`p-2 rounded-full transition-colors ${showFilters
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-600"
+                  ? "bg-black text-white"
+                  : "bg-gray-100 text-gray-600"
                   }`}
               >
                 {/* Icon Filter Lines */}
@@ -341,8 +312,8 @@ export default function Apparel() {
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
                   className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
                     }`}
                 >
                   <svg
@@ -367,8 +338,8 @@ export default function Apparel() {
                     key={index + 1}
                     onClick={() => paginate(index + 1)}
                     className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
-                        ? "bg-black text-white shadow-lg transform scale-110"
-                        : "text-gray-500 hover:bg-gray-100"
+                      ? "bg-black text-white shadow-lg transform scale-110"
+                      : "text-gray-500 hover:bg-gray-100"
                       }`}
                   >
                     {index + 1}
@@ -380,8 +351,8 @@ export default function Apparel() {
                   onClick={() => paginate(currentPage + 1)}
                   disabled={currentPage === totalPages}
                   className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
                     }`}
                 >
                   <svg

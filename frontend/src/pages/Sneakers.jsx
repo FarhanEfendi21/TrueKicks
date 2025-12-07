@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import SneakersBanner from "../components/SneakersBanner";
 import { supabase } from "../lib/supabaseClient";
 
 const useScrollAnimation = () => {
@@ -309,46 +310,8 @@ export default function Sneakers() {
       <Navbar />     {" "}
       <div className="pt-24 md:pt-32 pb-32 md:pb-20 max-w-7xl mx-auto px-4 md:px-6">
 
-        {/* ========================================================
-            MODERN SIMPLE BANNER - SNEAKERS
-        ======================================================== */}
-        <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl md:rounded-3xl p-8 md:p-14 mb-6 md:mb-10 text-center overflow-hidden">
-          {/* Gradient Accent Line - Top */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
-
-          {/* Subtle Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-          {/* Content */}
-          <div className="relative z-10">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 rounded-full mb-4 md:mb-5">
-              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
-              <span className="text-orange-400 font-semibold text-[11px] md:text-xs tracking-wider uppercase">Premium Collection</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-3 md:mb-4 tracking-tight">
-              ALL <span className="text-orange-500">SNEAKERS</span>
-            </h1>
-
-            {/* Search Result */}
-            {searchKeyword && (
-              <div className="mb-4 flex items-center justify-center gap-2">
-                <span className="text-gray-400 text-sm">Searching:</span>
-                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">{searchKeyword}</span>
-              </div>
-            )}
-
-            {/* Description */}
-            <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
-              Discover authentic kicks from top brands.
-            </p>
-          </div>
-
-          {/* Gradient Accent Line - Bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
-        </div>
+        {/* TRUEKICKS BANNER - BACK IN BLACK STYLE */}
+        <SneakersBanner searchKeyword={searchKeyword} />
 
         {/* ========================================================
             MODERN COMPACT FILTER (RESPONSIVE)

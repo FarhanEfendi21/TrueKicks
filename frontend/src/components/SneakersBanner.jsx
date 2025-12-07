@@ -27,8 +27,8 @@ const SneakersBanner = ({ searchKeyword }) => {
             {/* Center Content */}
             <div className="relative z-20 text-center flex flex-col items-center justify-center h-full py-4">
                 <p className="text-white font-black text-sm md:text-lg tracking-[0.3em] uppercase mb-2 italic">TrueKicks</p>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-none mb-3 md:mb-4">
-                    ALL <span className="text-orange-500">SNEAKERS</span>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-none mb-3 md:mb-4 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]">
+                    ALL <span className="text-orange-500 drop-shadow-[0_0_20px_rgba(249,115,22,0.5)]">SNEAKERS</span>
                 </h1>
                 {searchKeyword && (
                     <div className="mb-3 flex items-center justify-center gap-2">

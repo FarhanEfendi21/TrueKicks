@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Footer() {
+export default function Footer({ showOnMobile = false }) {
   const whatsappNumber = "081392460881";
   const whatsappMessage = "Halo TrueKicks, saya butuh bantuan...";
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <footer className="bg-gradient-to-b from-gray-50 to-white font-poppins border-t border-gray-100 pb-24 md:pb-0">
+    <footer className={`bg-gradient-to-b from-gray-50 to-white font-poppins border-t border-gray-100 pb-24 md:pb-0 ${showOnMobile ? '' : 'hidden md:block'}`}>
 
       {/* Decorative Top Accent */}
       <div className="h-1 bg-gradient-to-r from-[#FF5500] via-orange-400 to-[#FF5500]"></div>

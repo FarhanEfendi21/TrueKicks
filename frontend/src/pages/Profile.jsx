@@ -383,7 +383,7 @@ export default function Profile() {
           </div>
         )}
 
-        <Footer />
+        <Footer showOnMobile={true} />
       </div>
     </>
   );

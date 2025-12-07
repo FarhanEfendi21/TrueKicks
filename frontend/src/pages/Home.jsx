@@ -134,243 +134,184 @@ export default function Home() {
       <Navbar />
 
       {/* ===========================
-          1. HERO SECTION (RESPONSIVE UPDATE)
+          1. HERO SECTION - MINIMALIST & ELEGANT
          =========================== */}
-      <section className="relative w-full min-h-[600px] lg:min-h-[900px] flex flex-col items-center justify-center pt-32 pb-12 px-4 overflow-hidden">
-        {/* Modern Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-orange-50"></div>
+      <section className="relative w-full min-h-[85vh] lg:min-h-screen flex items-center justify-center pt-20 pb-12 px-4 overflow-hidden">
+        {/* Clean Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-50 via-white to-gray-50"></div>
 
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 -left-20 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-gradient-to-br from-purple-300/30 to-blue-300/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-          <div className="absolute top-40 -right-20 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-gradient-to-br from-orange-300/30 to-pink-300/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[300px] lg:w-[600px] h-[300px] lg:h-[600px] bg-gradient-to-br from-blue-300/30 to-cyan-300/30 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
-        </div>
+        {/* Subtle Accent */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF5500] to-transparent opacity-60"></div>
 
         {/* Hero Content Container */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto">
-          {/* Badge & Text Content */}
-          <div className="text-center mb-8 lg:mb-16 space-y-6">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-5 py-2 rounded-full shadow-lg shadow-orange-500/30 animate-fade-in-down">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span className="text-xs font-bold tracking-wider uppercase">
-                Limited Collection 2025
-              </span>
+        <div className="relative z-10 w-full max-w-6xl mx-auto">
+
+          {/* Main Content - Centered */}
+          <div className="text-center space-y-6 lg:space-y-8">
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full text-xs font-medium tracking-wide">
+              <span className="w-1.5 h-1.5 bg-[#FF5500] rounded-full animate-pulse"></span>
+              New Collection 2025
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-[0.95] lg:leading-[0.85]">
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-purple-700 to-blue-600 mb-2">
-                DISCOVER
-              </span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700">
-                LIMITATION
-              </span>
+            {/* Main Headline */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.9]">
+              <span className="block text-gray-900">Step Into</span>
+              <span className="block text-[#FF5500]">Greatness</span>
             </h1>
 
-            <p className="text-gray-600 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium px-4">
-              Explore the most exclusive sneaker collection with authentic
-              quality and cutting-edge design.
+            {/* Subtitle */}
+            <p className="text-gray-500 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
+              Premium authentic sneakers, curated for those who demand the best.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 w-full px-6 sm:px-0">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
               <button
                 onClick={() => scrollToSection(topPicksRef)}
-                className="w-full sm:w-auto group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold rounded-2xl shadow-lg shadow-orange-500/40 hover:shadow-xl hover:shadow-orange-500/50 transition-all hover:scale-105 overflow-hidden"
+                className="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-all hover:scale-105 shadow-lg shadow-gray-900/20"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Shop Now
-                  <svg
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2.5}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </span>
+                Shop Now
               </button>
-
               <button
                 onClick={() => scrollToSection(blackCollectionRef)}
-                className="w-full sm:w-auto px-8 py-4 bg-white/80 backdrop-blur-sm border-2 border-gray-200 text-gray-900 font-bold rounded-2xl hover:border-gray-900 hover:bg-white transition-all hover:shadow-lg"
+                className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 font-semibold rounded-xl border-2 border-gray-200 hover:border-gray-900 transition-all"
               >
-                View Collection
+                Explore
               </button>
             </div>
           </div>
 
           {/* ========================================================
-              --- [MOBILE ONLY] ALTERNATIVE CONTENT ---
+              --- [MOBILE ONLY] Brand Marquee + Trust Badges ---
               ======================================================== */}
-          <div className="lg:hidden w-full mt-10 mb-4 overflow-hidden">
-            {" "}
-            {/* Tambahkan overflow-hidden disini */}
-            {/* 1. Running Text / Marquee */}
-            <div className="relative w-full bg-black -rotate-2 py-2 mb-8 shadow-lg border-y-2 border-yellow-400 overflow-hidden">
-              {/* Container animasi harus lebih lebar dari layar (w-max) */}
+          <div className="lg:hidden mt-10">
+            {/* Brand Marquee - Dark Theme */}
+            <div className="relative w-full bg-gray-900 py-3 mb-8 overflow-hidden">
               <div className="flex w-max animate-marquee">
-                {/* BAGIAN 1 (Original) */}
-                <div className="flex gap-8 items-center text-white font-black italic tracking-widest text-sm px-4">
-                  <span>NIKE</span> ✦ <span>ADIDAS</span> ✦{" "}
-                  <span>NEW BALANCE</span> ✦ <span>PUMA</span> ✦{" "}
-                  <span>ASICS</span> ✦ <span>NIKE</span> ✦ <span>ADIDAS</span> ✦{" "}
+                {/* Part 1 */}
+                <div className="flex gap-8 items-center text-white font-bold tracking-widest text-sm px-4">
+                  <span>NIKE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>ADIDAS</span>
+                  <span className="text-[#FF5500]">✦</span>
                   <span>NEW BALANCE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>PUMA</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>CONVERSE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>ASICS</span>
+                  <span className="text-[#FF5500]">✦</span>
                 </div>
-
-                {/* BAGIAN 2 (Duplikat untuk Seamless Loop) - Wajib ada! */}
-                <div className="flex gap-8 items-center text-white font-black italic tracking-widest text-sm px-4">
-                  <span>NIKE</span> ✦ <span>ADIDAS</span> ✦{" "}
-                  <span>NEW BALANCE</span> ✦ <span>PUMA</span> ✦{" "}
-                  <span>ASICS</span> ✦ <span>NIKE</span> ✦ <span>ADIDAS</span> ✦{" "}
+                {/* Part 2 - Duplicate for seamless loop */}
+                <div className="flex gap-8 items-center text-white font-bold tracking-widest text-sm px-4">
+                  <span>NIKE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>ADIDAS</span>
+                  <span className="text-[#FF5500]">✦</span>
                   <span>NEW BALANCE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>PUMA</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>CONVERSE</span>
+                  <span className="text-[#FF5500]">✦</span>
+                  <span>ASICS</span>
+                  <span className="text-[#FF5500]">✦</span>
                 </div>
               </div>
             </div>
-            {/* 2. Simple Trust Badges (Grid) - Tetap sama */}
-            <div className="grid grid-cols-3 gap-2 px-4">
-              {/* ... kode trust badges tetap sama ... */}
-              <div className="bg-white/60 backdrop-blur p-3 rounded-xl text-center border border-gray-100 shadow-sm">
-                <div className="text-xl mb-1">📦</div>
-                <p className="text-[10px] font-bold text-gray-600 uppercase">
-                  Free Ship
-                </p>
+
+            {/* Trust Badges */}
+            <div className="flex justify-center gap-6 text-center">
+              <div>
+                <p className="text-2xl font-bold text-gray-900">100%</p>
+                <p className="text-xs text-gray-400">Authentic</p>
               </div>
-              <div className="bg-white/60 backdrop-blur p-3 rounded-xl text-center border border-gray-100 shadow-sm">
-                <div className="text-xl mb-1">🛡️</div>
-                <p className="text-[10px] font-bold text-gray-600 uppercase">
-                  Authentic
-                </p>
+              <div className="w-px bg-gray-200"></div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">Free</p>
+                <p className="text-xs text-gray-400">Shipping</p>
               </div>
-              <div className="bg-white/60 backdrop-blur p-3 rounded-xl text-center border border-gray-100 shadow-sm">
-                <div className="text-xl mb-1">↩️</div>
-                <p className="text-[10px] font-bold text-gray-600 uppercase">
-                  Returns
-                </p>
+              <div className="w-px bg-gray-200"></div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900">30</p>
+                <p className="text-xs text-gray-400">Days Return</p>
               </div>
             </div>
           </div>
 
           {/* ========================================================
-              --- [DESKTOP ONLY] SHOE & CARD ---
-              Tampil di Desktop, Sembunyi di HP (hidden lg:flex)
+              --- [DESKTOP ONLY] Featured Product Showcase ---
               ======================================================== */}
-          <div className="hidden lg:flex relative w-full h-[700px] items-center justify-center mt-8">
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-              <h2 className="text-[14rem] font-black text-gray-100/60 leading-none tracking-tighter whitespace-nowrap">
-                NIKE P-6000
-              </h2>
-            </div>
+          <div className="hidden lg:block relative mt-16">
+            {/* Product Image */}
+            <div className="relative flex justify-center">
+              <div className="relative group cursor-pointer">
+                {/* Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-200 to-orange-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-all duration-700 scale-75 group-hover:scale-100"></div>
 
-            <div className="relative z-20 group cursor-pointer">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-purple-400 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-all duration-500 scale-75 group-hover:scale-100"></div>
-              <img
-                src={heroImage}
-                alt="Nike P-6000"
-                className="relative w-[700px] -rotate-[12deg] drop-shadow-2xl -translate-y-16 transition-all duration-700 ease-out group-hover:scale-110 group-hover:-rotate-6 group-hover:drop-shadow-[0_35px_60px_rgba(0,0,0,0.25)]"
-              />
-            </div>
+                <img
+                  src={heroImage}
+                  alt="Nike P-6000"
+                  className="relative w-[550px] -rotate-12 drop-shadow-2xl transition-all duration-700 ease-out group-hover:scale-105 group-hover:-rotate-6"
+                />
+              </div>
 
-            {/* Floating Card (Desktop Only) */}
-            <div
-              className="absolute top-[15%] right-[10%] z-30 group/card"
-              onClick={() => navigate("/product/sneakers/3")}
-            >
-              <div className="relative bg-white/95 backdrop-blur-xl p-6 rounded-3xl shadow-2xl border border-white/50 w-72 transform transition-all duration-500 hover:scale-105 hover:-translate-y-2">
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-orange-400/30 via-purple-400/30 to-blue-400/30 opacity-0 group-hover/card:opacity-100 transition-opacity blur-2xl -z-10"></div>
-
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-black text-gray-900 text-lg leading-tight mb-1">
-                      Nike P-6000 Metallic Silver
-                    </h3>
-                    <p className="text-xs text-gray-500 font-medium">
-                      Limited Edition
-                    </p>
+              {/* Floating Card */}
+              <div
+                className="absolute top-0 right-[5%] xl:right-[15%] cursor-pointer group/card"
+                onClick={() => navigate("/product/sneakers/3")}
+              >
+                <div className="bg-white p-5 rounded-2xl shadow-xl border border-gray-100 w-64 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <p className="text-xs text-gray-400 font-medium mb-1">Featured</p>
+                      <h3 className="font-bold text-gray-900 text-sm leading-tight">Nike P-6000 Metallic Silver</h3>
+                    </div>
+                    <span className="text-xs bg-[#FF5500] text-white px-2 py-1 rounded-lg font-medium">-19%</span>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <div className="flex text-orange-500 text-sm">
-                      {"★".repeat(5)}
-                    </div>
-                    <span className="text-sm font-bold text-gray-700">
-                      (4.9)
-                    </span>
-                    <span className="text-xs text-gray-400 ml-auto">
-                      2.1K reviews
-                    </span>
+                  <div className="flex items-center gap-1 mb-3">
+                    <div className="flex text-[#FF5500] text-xs">★★★★★</div>
+                    <span className="text-xs text-gray-400">(4.9)</span>
                   </div>
 
-                  <div className="pt-3 border-t border-gray-100">
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-xs text-gray-400 line-through mb-1">
-                          IDR 1,800,000
-                        </p>
-                        <p className="text-2xl font-black bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                          IDR 1,460,000
-                        </p>
-                      </div>
-                      <button className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-orange-500/40">
-                        <svg
-                          className="w-6 h-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2.5}
-                            d="M12 4v16m8-8H4"
-                          />
-                        </svg>
-                      </button>
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div>
+                      <p className="text-xs text-gray-400 line-through">Rp 1.800.000</p>
+                      <p className="text-lg font-bold text-gray-900">Rp 1.460.000</p>
                     </div>
+                    <button className="w-10 h-10 bg-gray-900 text-white rounded-xl flex items-center justify-center hover:bg-[#FF5500] transition-colors">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
-
-                <svg
-                  className="absolute top-1/2 -left-32 w-36 h-24 text-orange-500/80 pointer-events-none"
-                  viewBox="0 0 150 80"
-                  fill="none"
-                >
-                  <path
-                    d="M 145 15 Q 100 15, 80 40 T 10 55"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeDasharray="6 4"
-                    strokeLinecap="round"
-                    className="animate-pulse"
-                  />
-                  <circle cx="10" cy="55" r="4" fill="currentColor">
-                    <animate
-                      attributeName="r"
-                      values="3;5;3"
-                      dur="2s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
               </div>
             </div>
 
-            {/* Desktop Badges */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 justify-center">
-              <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/50 text-xs font-bold text-gray-700">
-                ✓ Authentic Product
+            {/* Desktop Trust Badges */}
+            <div className="flex justify-center gap-8 mt-12">
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <svg className="w-5 h-5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                100% Authentic
               </div>
-              <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/50 text-xs font-bold text-gray-700">
-                ✓ Free Shipping
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <svg className="w-5 h-5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Free Shipping
               </div>
-              <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-white/50 text-xs font-bold text-gray-700">
-                ✓ 30 Days Return
+              <div className="flex items-center gap-2 text-sm text-gray-500">
+                <svg className="w-5 h-5 text-[#FF5500]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                30 Days Return
               </div>
             </div>
           </div>

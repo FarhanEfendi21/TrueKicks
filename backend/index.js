@@ -151,7 +151,7 @@ app.get("/api/detail/:table/:id", async (req, res) => {
 
 // === 8. ROUTE ORDER / CHECKOUT ===
 app.post("/api/orders", async (req, res) => {
-  const { user_id, full_name, address, phone, total_price, items } = req.body;
+  const { user_id, full_name, address, city, postal_code, phone, total_price, items } = req.body;
 
   try {
     const parsed_user_id = parseInt(user_id);
@@ -171,6 +171,8 @@ app.post("/api/orders", async (req, res) => {
       user_id: parsed_user_id,
       full_name: full_name,
       address: address,
+      city: city || "",
+      postal_code: postal_code || "",
       phone: phone,
       total_price: parsed_total_price,
       items: items,
@@ -188,6 +190,32 @@ app.post("/api/orders", async (req, res) => {
   } catch (error) {
     console.error("Error Detail:", error.message);
     res.status(500).json({ error: "DB Insert Failed: " + error.message });
+  }
+});
+
+// === 8b. ROUTE GET USER ORDERS (Order History) ===
+app.get("/api/orders/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const parsed_user_id = parseInt(userId);
+
+    if (isNaN(parsed_user_id)) {
+      return res.status(400).json({ error: "Invalid user ID." });
+    }
+
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", parsed_user_id)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    res.json(data || []);
+  } catch (error) {
+    console.error("Error fetching orders:", error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 

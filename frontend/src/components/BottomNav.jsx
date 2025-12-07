@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../Context/CartContext";
 
 import { HiHome, HiOutlineHome, HiUser, HiOutlineUser } from "react-icons/hi2";
-import { HiOutlineShoppingBag, HiOutlineHeart } from "react-icons/hi2";
 import { GiRunningShoe, GiHoodie } from "react-icons/gi";
 import { FiPercent, FiHeart } from "react-icons/fi";
 import { RiAddFill } from "react-icons/ri";
@@ -26,7 +25,6 @@ export default function BottomNav() {
     return () => window.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
-  // Cek apakah route aktif
   const isActive = (path) => location.pathname === path;
 
   // Sembunyikan BottomNav di halaman Checkout
@@ -34,145 +32,136 @@ export default function BottomNav() {
 
   return (
     <>
-      {/* 1. DARK OVERLAY */}
+      {/* ========================================
+          1. OVERLAY BACKDROP
+      ======================================== */}
       <div
-        className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 md:hidden
-        ${showMenu
-            ? "opacity-100 visible"
-            : "opacity-0 invisible pointer-events-none"
-          }`}
+        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-all duration-300 md:hidden
+        ${showMenu ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
       />
 
-      {/* 2. MENU OVERLAY (POPUP CONTENT) - UPDATE ICONS */}
+      {/* ========================================
+          2. QUICK MENU POPUP
+      ======================================== */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-50 transition-all duration-500 cubic-bezier(0.175, 0.885, 0.32, 1.275) origin-bottom md:hidden
-        ${showMenu
-            ? "translate-y-0 opacity-100 scale-100"
-            : "translate-y-10 opacity-0 scale-90 pointer-events-none"
-          }`}
+        className={`fixed bottom-28 left-1/2 -translate-x-1/2 w-[85%] max-w-sm z-50 transition-all duration-300 ease-out md:hidden
+        ${showMenu ? "translate-y-0 opacity-100 scale-100" : "translate-y-4 opacity-0 scale-95 pointer-events-none"}`}
       >
-        <div className="bg-[#1A1A1A] border border-white/10 rounded-3xl p-5 shadow-2xl shadow-black/50 overflow-hidden relative">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF5500]/10 blur-3xl rounded-full pointer-events-none"></div>
-
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-xs font-bold text-gray-400 tracking-widest uppercase">
+        <div className="bg-white rounded-2xl p-4 shadow-2xl shadow-black/20 border border-gray-100">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">
               Quick Menu
             </span>
+            <button
+              onClick={() => setShowMenu(false)}
+              className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-200 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
-          {/* Update: Menggunakan Component Icon modern daripada emoji */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Menu Grid */}
+          <div className="grid grid-cols-2 gap-2">
             <MenuButton
-              icon={<GiRunningShoe className="w-6 h-6" />}
+              icon={<GiRunningShoe className="w-5 h-5" />}
               title="Sneakers"
-              subtitle="All Collections"
               onClick={() => handleNavigate("/sneakers")}
             />
             <MenuButton
-              icon={<GiHoodie className="w-6 h-6" />}
+              icon={<GiHoodie className="w-5 h-5" />}
               title="Apparel"
-              subtitle="Streetwear"
               onClick={() => handleNavigate("/apparel")}
             />
             <MenuButton
-              icon={<FiPercent className="w-6 h-6" />}
+              icon={<FiPercent className="w-5 h-5" />}
               title="Sale"
-              subtitle="Hot Deals"
               onClick={() => handleNavigate("/sale")}
               highlight
             />
             <MenuButton
-              icon={<FiHeart className="w-6 h-6" />}
+              icon={<FiHeart className="w-5 h-5" />}
               title="Wishlist"
-              subtitle="Your Favorites"
               onClick={() => handleNavigate("/wishlist")}
             />
           </div>
         </div>
       </div>
 
-      {/* ==================================================================
-          3. FLOATING CART BUTTON (PREMIUM GLOW STYLE)
-         ================================================================== */}
+      {/* ========================================
+          3. FLOATING CART BUTTON
+      ======================================== */}
       <div
-        className={`fixed bottom-28 right-6 z-40 md:hidden transition-all duration-300 ${showMenu ? "blur-sm opacity-50" : "opacity-100"
-          }`}
+        className={`fixed bottom-24 right-5 z-40 md:hidden transition-all duration-300 
+        ${showMenu ? "opacity-30 scale-90" : "opacity-100 scale-100"}`}
       >
         <button
           onClick={() => navigate("/cart")}
-          className="group relative w-16 h-16 rounded-full flex items-center justify-center transition-transform active:scale-90"
+          className="relative w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center shadow-lg shadow-black/30 active:scale-95 transition-transform"
         >
-          {/* Background Blur/Glow Effect */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#FF5500] to-orange-600 blur-lg opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
+          {/* Cart Icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-6 h-6 text-white"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12c-.15.143-.206.361-.143.558a.75.75 0 00.713.494h18.09a.75.75 0 00.713-.494.75.75 0 00-.143-.558l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z"
+              clipRule="evenodd"
+            />
+          </svg>
 
-          {/* Main Button Circle */}
-          <div className="relative w-full h-full bg-gradient-to-br from-[#FF5500] to-orange-600 rounded-full flex items-center justify-center shadow-xl border border-white/20 overflow-hidden">
-            {/* Shine Animation */}
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
-
-            {/* Icon Tas Belanja */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-7 h-7 text-white drop-shadow-md"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12c-.15.143-.206.361-.143.558a.75.75 0 00.713.494h18.09a.75.75 0 00.713-.494.75.75 0 00-.143-.558l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-
-          {/* Badge Notification (Pulsing) */}
+          {/* Badge */}
           {totalItems > 0 && (
-            <span className="absolute top-0 right-0 flex h-6 w-6">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-6 w-6 bg-white text-[#FF5500] border-2 border-[#FF5500] items-center justify-center text-[10px] font-black">
-                {totalItems}
-              </span>
+            <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 bg-orange-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              {totalItems}
             </span>
           )}
         </button>
       </div>
 
-      {/* 4. BOTTOM NAV BAR (MAIN UPDATE) */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[350px] z-50 md:hidden">
-        <div className="bg-[#121212]/95 backdrop-blur-xl rounded-full px-8 h-[72px] flex justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.4)] border border-white/5 relative">
-          {/* --- TOMBOL KIRI: HOME (Outline vs Solid) --- */}
+      {/* ========================================
+          4. MAIN BOTTOM NAV BAR
+      ======================================== */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 pb-4 pt-2">
+        <div className="bg-white rounded-2xl h-16 flex justify-around items-center shadow-lg shadow-black/10 border border-gray-100 max-w-md mx-auto">
+
+          {/* Home Button */}
           <NavIcon
             active={isActive("/home")}
             onClick={() => handleNavigate("/home")}
-            IconOutline={HiOutlineHome} // Icon saat tidak aktif
-            IconFilled={HiHome} // Icon saat aktif
+            IconOutline={HiOutlineHome}
+            IconFilled={HiHome}
+            label="Home"
           />
 
-          {/* --- TOMBOL TENGAH: PLUS MENU --- */}
-          <div className="relative -top-6">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowMenu(!showMenu);
-              }}
-              className={`w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,85,0,0.4)] transition-all duration-300 border-4 border-[#121212] group
-                    ${showMenu
-                  ? "bg-white text-black rotate-45 scale-95"
-                  : "bg-[#FF5500] text-white rotate-0 hover:scale-105"
-                }`}
-            >
-              {/* Menggunakan icon plus yang lebih tebal (RiAddFill) */}
-              <RiAddFill className="w-9 h-9 transition-transform group-hover:rotate-90 duration-300" />
-            </button>
-          </div>
+          {/* Center Button - Menu */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMenu(!showMenu);
+            }}
+            className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 
+            ${showMenu
+                ? "bg-gray-900 rotate-45"
+                : "bg-orange-500 hover:bg-orange-600"
+              }`}
+          >
+            <RiAddFill className="w-6 h-6 text-white" />
+          </button>
 
-          {/* --- TOMBOL KANAN: PROFILE (Outline vs Solid) --- */}
+          {/* Profile Button */}
           <NavIcon
-            active={isActive("/profile") || isActive("/login")} // Aktif di profile atau login
+            active={isActive("/profile") || isActive("/login")}
             onClick={() => handleNavigate("/profile")}
             IconOutline={HiOutlineUser}
             IconFilled={HiUser}
+            label="Profile"
           />
         </div>
       </div>
@@ -181,75 +170,44 @@ export default function BottomNav() {
 }
 
 // ==================================================================
-// SUB-COMPONENT YANG DIPERBARUI
+// SUB-COMPONENTS
 // ==================================================================
 
-// --- 1. MODERNISED NAV ICON (Menerima komponen Icon, bukan SVG string) ---
-function NavIcon({ active, onClick, IconOutline, IconFilled }) {
+function NavIcon({ active, onClick, IconOutline, IconFilled, label }) {
   return (
     <button
       onClick={onClick}
-      // Gunakan 'group' untuk hover effect
-      // Warna inactive diubah jadi gray-400 agar lebih subtle
-      className={`flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group relative
-             ${active ? "text-[#FF5500]" : "text-gray-400 hover:text-gray-200"
-        }`}
+      className={`flex flex-col items-center justify-center w-16 h-full transition-colors
+        ${active ? "text-orange-500" : "text-gray-400 hover:text-gray-600"}`}
     >
-      {/* Container Icon dengan animasi scale */}
-      <div
-        className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-105"
-          }`}
-      >
+      <div className={`transition-transform ${active ? "scale-110" : ""}`}>
         {active ? (
-          // Render Icon Solid jika aktif
-          <IconFilled className="w-[28px] h-[28px]" />
+          <IconFilled className="w-6 h-6" />
         ) : (
-          // Render Icon Outline jika tidak aktif (stroke sedikit dipertebal)
-          <IconOutline className="w-[28px] h-[28px] stroke-[1.5]" />
+          <IconOutline className="w-6 h-6" />
         )}
       </div>
-
-      {/* Indikator Dot di bawah (opsional, sekarang lebih halus) */}
-      <span
-        className={`absolute bottom-1 w-1.5 h-1.5 bg-[#FF5500] rounded-full transition-all duration-300 
-                ${active ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
-      ></span>
+      <span className={`text-[10px] mt-0.5 font-medium ${active ? "text-orange-500" : "text-gray-400"}`}>
+        {label}
+      </span>
     </button>
   );
 }
 
-// --- 2. MENU ITEM BUTTON (Menerima komponen Icon) ---
-function MenuButton({ icon, title, subtitle, onClick, highlight }) {
+function MenuButton({ icon, title, onClick, highlight }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 p-3 rounded-2xl text-left transition-all active:scale-95 border group
-            ${highlight
-          ? "bg-gradient-to-r from-[#FF5500] to-orange-600 border-transparent text-white shadow-lg"
-          : "bg-white/5 border-white/5 hover:bg-white/10 text-gray-300 hover:text-white"
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all active:scale-95
+        ${highlight
+          ? "bg-orange-500 text-white"
+          : "bg-gray-50 text-gray-700 hover:bg-gray-100"
         }`}
     >
-      {/* Render icon component */}
-      <span
-        className={`text-2xl transition-transform group-hover:scale-110 ${highlight ? "text-white" : "text-gray-400 group-hover:text-[#FF5500]"
-          }`}
-      >
+      <span className={highlight ? "text-white" : "text-gray-500"}>
         {icon}
       </span>
-      <div>
-        <span
-          className={`block font-bold text-sm ${highlight ? "text-white" : "text-gray-200"
-            }`}
-        >
-          {title}
-        </span>
-        <span
-          className={`block text-[10px] ${highlight ? "text-white/80" : "text-gray-500"
-            }`}
-        >
-          {subtitle}
-        </span>
-      </div>
+      <span className="font-semibold text-sm">{title}</span>
     </button>
   );
 }

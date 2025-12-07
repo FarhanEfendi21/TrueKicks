@@ -10,15 +10,21 @@
   html {
     font-family: 'Poppins', sans-serif;
   }
+
   body {
-    @apply bg-gray-50 text-gray-800; /* Tambahan biar background agak abu dikit gak silau */
+    @apply bg-gray-50 text-gray-800;
+    /* Tambahan biar background agak abu dikit gak silau */
   }
 }
+
 /* Sembunyikan Scrollbar tapi tetap bisa discroll */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

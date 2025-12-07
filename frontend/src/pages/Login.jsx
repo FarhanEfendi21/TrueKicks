@@ -127,11 +127,10 @@ export default function Login() {
               onClick={() => {
                 setActiveTab("signup");
               }}
-              className={`w-1/2 pb-3 text-base font-bold transition-all relative ${
-                activeTab === "signup"
+              className={`w-1/2 pb-3 text-base font-bold transition-all relative ${activeTab === "signup"
                   ? "text-gray-900"
                   : "text-gray-400 hover:text-gray-600"
-              }`}
+                }`}
             >
               Sign Up
               {activeTab === "signup" && (
@@ -142,11 +141,10 @@ export default function Login() {
               onClick={() => {
                 setActiveTab("login");
               }}
-              className={`w-1/2 pb-3 text-base font-bold transition-all relative ${
-                activeTab === "login"
+              className={`w-1/2 pb-3 text-base font-bold transition-all relative ${activeTab === "login"
                   ? "text-gray-900"
                   : "text-gray-400 hover:text-gray-600"
-              }`}
+                }`}
             >
               Log In
               {activeTab === "login" && (
@@ -167,7 +165,6 @@ export default function Login() {
                   type="text"
                   required
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black focus:bg-white transition-all text-sm font-medium"
-                  placeholder="e.g. Jordan Peterson"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
@@ -183,7 +180,6 @@ export default function Login() {
                 type="email"
                 required
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black focus:bg-white transition-all text-sm font-medium"
-                placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -199,7 +195,6 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   required
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black focus:bg-white transition-all text-sm font-medium"
-                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />

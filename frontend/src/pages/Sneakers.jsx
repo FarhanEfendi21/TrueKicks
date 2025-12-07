@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+﻿import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -304,48 +304,54 @@ export default function Sneakers() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-poppins">
-            <Navbar />     {" "}
+      <Navbar />     {" "}
       <div className="pt-24 md:pt-32 pb-32 md:pb-20 max-w-7xl mx-auto px-4 md:px-6">
-               
+
         {/* ========================================================
-            HEADER & SEARCH RESULT
+            MODERN SIMPLE BANNER - SNEAKERS
         ======================================================== */}
-               {" "}
-        <div className="text-center mb-6">
-                     {" "}
-          <span className="text-[#FF5500] font-bold text-sm tracking-wider uppercase">
-            Premium Collection
-          </span>
-                                 {" "}
-          <h1 className="text-3xl md:text-5xl font-black text-gray-900 mt-2">
-            ALL SNEAKERS
-          </h1>
-                                 {" "}
-          {searchKeyword && (
-            <div className="mt-4 mb-4 flex items-center justify-center gap-3 animate-fade-in-down">
-                                 {" "}
-              <span className="text-base text-gray-600 font-medium">
-                Showing results for:
-              </span>
-                                 {" "}
-              <span className="inline-block bg-[#FF5500]/10 text-[#FF5500] px-4 py-1.5 rounded-lg font-black text-sm uppercase shadow-sm border border-[#FF5500]/20 transition-all hover:scale-[1.03]">
-                                        "{searchKeyword}"                    {" "}
-              </span>
-                             {" "}
+        <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl md:rounded-3xl p-8 md:p-14 mb-6 md:mb-10 text-center overflow-hidden">
+          {/* Gradient Accent Line - Top */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+          
+          {/* Subtle Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          {/* Content */}
+          <div className="relative z-10">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 px-4 py-1.5 rounded-full mb-4 md:mb-5">
+              <div className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse"></div>
+              <span className="text-orange-400 font-semibold text-[11px] md:text-xs tracking-wider uppercase">Premium Collection</span>
             </div>
-          )}
-                     {" "}
-          <p className="text-gray-500 max-w-2xl mx-auto mt-4">
-                            Browse our extensive range of rare and limited
-            edition sneakers. Find the perfect pair that suits your style.      
-                 {" "}
-          </p>
-                 {" "}
+            
+            {/* Title */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-3 md:mb-4 tracking-tight">
+              ALL <span className="text-orange-500">SNEAKERS</span>
+            </h1>
+            
+            {/* Search Result */}
+            {searchKeyword && (
+              <div className="mb-4 flex items-center justify-center gap-2">
+                <span className="text-gray-400 text-sm">Searching:</span>
+                <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">{searchKeyword}</span>
+              </div>
+            )}
+            
+            {/* Description */}
+            <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+              Discover authentic kicks from top brands.
+            </p>
+          </div>
+          
+          {/* Gradient Accent Line - Bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
         </div>
+
         {/* ========================================================
-    MODERN COMPACT FILTER (RESPONSIVE)
-======================================================== */}
-        {/* UBAH 1: Kurangi margin bawah container utama dari mb-8 jadi mb-4 di mobile */}
+            MODERN COMPACT FILTER (RESPONSIVE)
+        ======================================================== */}
+        {/* Kurangi margin bawah container utama dari mb-8 jadi mb-4 di mobile */}
         <div className="lg:col-span-3 mb-4 lg:mb-8">
           {/* 1. TOP BAR (Control & Status) */}
           {/* UBAH 2: Kurangi margin bawah tombol toggle dari mb-4 jadi mb-2 */}
@@ -355,11 +361,10 @@ export default function Sneakers() {
               className="group flex items-center gap-3 text-gray-900 hover:text-orange-600 transition-colors"
             >
               <div
-                className={`p-2 rounded-full transition-colors ${
-                  showFilters
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-600"
-                }`}
+                className={`p-2 rounded-full transition-colors ${showFilters
+                  ? "bg-black text-white"
+                  : "bg-gray-100 text-gray-600"
+                  }`}
               >
                 {/* Icon Filter */}
                 <svg
@@ -410,9 +415,8 @@ export default function Sneakers() {
 
           {/* 2. EXPANDABLE FILTER PANEL */}
           <div
-            className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              showFilters ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${showFilters ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <div className="bg-white p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-100/50 space-y-5 md:space-y-8">
               {/* SECTION A: SHOE TYPE (Chips Style) */}
@@ -433,11 +437,10 @@ export default function Sneakers() {
                         className={`
                                     flex-shrink-0 snap-start
                                     px-4 py-2 md:px-5 md:py-2.5 rounded-xl text-xs font-bold transition-all duration-200 border
-                                    ${
-                                      isActive
-                                        ? "bg-black text-white border-black shadow-lg shadow-black/20 transform scale-105"
-                                        : "bg-gray-50 text-gray-600 border-transparent hover:bg-gray-100 hover:border-gray-200"
-                                    }
+                                    ${isActive
+                            ? "bg-black text-white border-black shadow-lg shadow-black/20 transform scale-105"
+                            : "bg-gray-50 text-gray-600 border-transparent hover:bg-gray-100 hover:border-gray-200"
+                          }
                                 `}
                       >
                         {typeCat}
@@ -466,11 +469,10 @@ export default function Sneakers() {
                         className={`
                         flex-shrink-0 snap-start
                         relative px-5 py-2 md:px-6 md:py-2.5 rounded-full text-xs font-bold transition-all duration-200 border whitespace-nowrap
-                        ${
-                          isActive
+                        ${isActive
                             ? "bg-[#FF5500] text-white border-[#FF5500] shadow-md shadow-orange-500/20 transform scale-[1.02]"
                             : "bg-white text-gray-500 border-gray-200 hover:border-gray-300 hover:text-gray-900"
-                        }
+                          }
                     `}
                       >
                         {cat}
@@ -508,11 +510,10 @@ export default function Sneakers() {
                 <button
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === 1
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -534,26 +535,24 @@ export default function Sneakers() {
                   <button
                     key={index + 1}
                     onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${
-                      currentPage === index + 1
-                        ? "bg-black text-white shadow-lg transform scale-110"
-                        : "text-gray-500 hover:bg-gray-100"
-                    }`}
+                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
+                      ? "bg-black text-white shadow-lg transform scale-110"
+                      : "text-gray-500 hover:bg-gray-100"
+                      }`}
                   >
-                    {index + 1} 
+                    {index + 1}
                   </button>
                 ))}
-                                  {/* Tombol Next */}                 {" "}
+                {/* Tombol Next */}                 {" "}
                 <button
                   onClick={() => paginate(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === totalPages
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    }`}
                 >
-                                     {" "}
+                  {" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -562,40 +561,40 @@ export default function Sneakers() {
                     stroke="currentColor"
                     className="w-4 h-4"
                   >
-                                         {" "}
+                    {" "}
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M8.25 4.5l7.5 7.5-7.5 7.5"
                     />
-                                       {" "}
+                    {" "}
                   </svg>
-                                   {" "}
+                  {" "}
                 </button>
-                               {" "}
+                {" "}
               </div>
             )}
-                       {" "}
+            {" "}
           </>
         ) : (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-300">
-                           {" "}
+            {" "}
             <p className="text-xl font-bold text-gray-400">
               No sneakers found for "{activeCategory}"
             </p>
-                           {" "}
+            {" "}
             <button
               onClick={() => handleFilter("All")}
               className="mt-4 text-[#FF5500] font-bold hover:underline"
             >
-                                  View All Sneakers                {" "}
+              View All Sneakers                {" "}
             </button>
-                       {" "}
+            {" "}
           </div>
         )}
-             {" "}
+        {" "}
       </div>
-            <Footer />   {" "}
+      <Footer />   {" "}
     </div>
   );
 }

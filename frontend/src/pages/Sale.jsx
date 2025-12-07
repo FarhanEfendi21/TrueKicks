@@ -56,10 +56,9 @@ const ProductCard = ({ item, navigate, index }) => {
         hover:shadow-lg transition-all duration-700 ease-out 
         hover:-translate-y-1 cursor-pointer h-full flex flex-col justify-between group
         transform will-change-transform
-        ${
-          isVisible
-            ? "opacity-100 translate-y-0 scale-100"
-            : "opacity-0 translate-y-12 scale-95" // Ubah jarak sedikit agar lebih smooth di HP
+        ${isVisible
+          ? "opacity-100 translate-y-0 scale-100"
+          : "opacity-0 translate-y-12 scale-95" // Ubah jarak sedikit agar lebih smooth di HP
         }
       `}
     >
@@ -128,51 +127,62 @@ const SaleProductCard = ({ item, navigate }) => {
   return (
     <div
       onClick={() => navigate(`/product/sale_products/${item.id}`)}
-      // Hapus class animasi scroll, sisakan hover effect saja
-      className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-red-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer group h-full flex flex-col justify-between"
+      className="bg-gradient-to-br from-gray-900 via-black to-gray-900 p-3 md:p-4 rounded-2xl md:rounded-3xl shadow-lg border border-purple-500/20 hover:border-purple-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/30 cursor-pointer group h-full flex flex-col justify-between relative overflow-hidden"
     >
+      {/* Neon Glow Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-pink-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+      {/* Animated Orb */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 group-hover:scale-150"></div>
+
       {/* Gambar & Badge */}
       <div>
-        <div className="relative h-[180px] bg-gray-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-red-50 transition-colors overflow-hidden">
-          {/* Badge Persen */}
+        <div className="relative h-[140px] md:h-[180px] bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 group-hover:from-purple-900/20 group-hover:to-pink-900/20 transition-all duration-500 overflow-hidden border border-white/5">
+          {/* Badge Persen - Neon Style */}
           {discountPercentage > 0 && (
-            <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-md z-10 shadow-md">
+            <span className="absolute top-2 left-2 md:top-3 md:left-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[9px] md:text-[10px] font-black px-2 md:px-3 py-1 md:py-1.5 rounded-md md:rounded-lg z-10 shadow-lg shadow-purple-500/50 border border-purple-400/30 animate-pulse">
               -{discountPercentage}%
             </span>
           )}
 
+          {/* Neon Glow behind image */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          </div>
+
           <img
             src={item.image_url}
-            className="w-[85%] h-[85%] object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6"
+            className="w-[85%] h-[85%] object-contain mix-blend-lighten transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6 relative z-10 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]"
             alt={item.name}
             loading="lazy"
           />
         </div>
-        <h3 className="font-bold text-gray-900 text-sm line-clamp-2 mb-1 group-hover:text-red-600 transition-colors">
+
+        <h3 className="font-bold text-gray-100 text-xs md:text-sm line-clamp-2 mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300 relative z-10 min-h-[2.5em] md:min-h-[2.8em]">
           {item.name}
         </h3>
-        <p className="text-xs text-gray-500">{item.category}</p>
+        <p className="text-[10px] md:text-xs text-gray-500 group-hover:text-purple-400/70 transition-colors relative z-10 truncate">{item.category}</p>
       </div>
 
-      {/* Harga */}
-      <div className="mt-3">
+      {/* Harga - Neon Gradient */}
+      <div className="mt-2 md:mt-3 relative z-10">
         {discountPercentage > 0 && (
-          <p className="text-gray-400 text-xs line-through decoration-red-400 decoration-2">
+          <p className="text-gray-600 text-[10px] md:text-xs line-through decoration-purple-500/50 decoration-2">
             Rp {(originalPrice / 1000).toLocaleString()}K
           </p>
         )}
         <div className="flex items-center justify-between mt-1">
-          <p className="text-red-600 font-black text-lg">
+          <p className="font-black text-base md:text-lg bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
             Rp {(currentPrice / 1000).toLocaleString()}K
           </p>
-          <button className="w-9 h-9 bg-red-600 text-white rounded-xl flex items-center justify-center hover:bg-red-700 transition-colors shadow-md shadow-red-200">
+          <button className="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg md:rounded-xl flex items-center justify-center hover:from-purple-500 hover:to-pink-500 transition-all duration-300 shadow-lg shadow-purple-500/50 hover:shadow-purple-500/80 hover:scale-110 active:scale-95 border border-purple-400/30">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2.5}
               stroke="currentColor"
-              className="w-4 h-4"
+              className="w-3.5 h-3.5 md:w-4 md:h-4"
             >
               <path
                 strokeLinecap="round"
@@ -183,6 +193,9 @@ const SaleProductCard = ({ item, navigate }) => {
           </button>
         </div>
       </div>
+
+      {/* Shimmer effect on hover */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-400/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none"></div>
     </div>
   );
 };
@@ -352,147 +365,95 @@ export default function Sale() {
         }
       `}</style>
 
-      <div className="pt-32 pb-20 max-w-7xl mx-auto px-6">
-        {/* === SALE HEADER BANNER === */}
+      <div className="pt-24 pb-16 md:pt-32 md:pb-20 max-w-7xl mx-auto px-4 md:px-6">
+        {/* === SALE HEADER BANNER - DARK THEME RESPONSIVE === */}
         <div
-          className="relative bg-gradient-to-br from-red-600 via-red-500 to-orange-600 rounded-[2.5rem] p-8 md:p-12 mb-12 text-center text-white overflow-hidden 
-                     shadow-xl shadow-red-400/50 transition-all duration-500 group hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
+          className="relative bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl md:rounded-[2.5rem] p-6 md:p-12 lg:p-16 mb-6 md:mb-12 text-center text-white overflow-hidden 
+                     shadow-lg md:shadow-2xl shadow-purple-900/30 transition-all duration-500 group hover:scale-[1.01] hover:shadow-purple-900/50 cursor-pointer
+                     border border-white/5"
           onMouseMove={handleMouseMove}
         >
-          {/* Animated Gradient Background Orbs */}
+          {/* Animated Neon Gradient Orbs - Smaller on mobile */}
           <div className="absolute inset-0 overflow-hidden">
+            {/* Main Center Glow */}
             <div
-              className="absolute top-1/2 left-1/2 w-[350px] h-[350px] bg-red-400/40 rounded-full blur-3xl animate-pulse -translate-x-1/2 -translate-y-1/2"
-              style={{ animationDuration: "4s" }}
+              className="absolute top-1/2 left-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-gradient-to-r from-purple-600/30 via-pink-600/20 to-orange-600/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"
+              style={{ animationDuration: "5s" }}
             ></div>
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl animate-float-up"></div>
-            <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-yellow-300/20 rounded-full blur-3xl animate-float-down"></div>
 
-            {/* Rotating Ring */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 border-2 border-white/10 rounded-full animate-rotate-slow"></div>
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 border border-white/5 rounded-full animate-rotate-slow"
-              style={{
-                animationDuration: "15s",
-                animationDirection: "reverse",
-              }}
-            ></div>
-          </div>
+            {/* Floating Accent Orbs - Hidden on small mobile */}
+            <div className="hidden sm:block absolute -top-20 -left-20 w-48 md:w-64 h-48 md:h-64 bg-gradient-to-br from-blue-500/20 to-purple-600/10 rounded-full blur-3xl animate-float-up"></div>
+            <div className="hidden sm:block absolute -bottom-20 -right-20 w-56 md:w-80 h-56 md:h-80 bg-gradient-to-br from-pink-500/20 to-orange-600/10 rounded-full blur-3xl animate-float-down"></div>
 
-          {/* Floating Particles */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {particles.map((particle) => (
-              <div
-                key={particle.id}
-                className="absolute rounded-full bg-white/30 animate-float-particle"
-                style={{
-                  left: `${particle.x}%`,
-                  top: `${particle.y}%`,
-                  width: `${particle.size}px`,
-                  height: `${particle.size}px`,
-                  animationDuration: `${particle.duration}s`,
-                  animationDelay: `${particle.delay}s`,
-                }}
-              />
-            ))}
+            {/* Rotating Neon Rings - Smaller on mobile */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[500px] md:h-[500px] border border-purple-500/10 rounded-full animate-rotate-slow"></div>
           </div>
 
           {/* Grid Pattern Overlay */}
           <div
-            className="absolute inset-0 opacity-5"
+            className="absolute inset-0 opacity-[0.02] md:opacity-[0.03]"
             style={{
               backgroundImage:
-                "linear-gradient(white 1px, transparent 1px), linear-gradient(90deg, white 1px, transparent 1px)",
-              backgroundSize: "50px 50px",
+                "linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)",
+              backgroundSize: "30px 30px",
             }}
           />
 
-          {/* Sparkle Effects */}
-          <div className="absolute top-10 left-20 w-3 h-3 bg-white rounded-full animate-sparkle"></div>
+          {/* === FLOATING BADGES - Hidden on mobile to avoid overlap === */}
+          {/* Top Right Badge - Hidden on mobile */}
           <div
-            className="absolute top-20 right-32 w-2 h-2 bg-yellow-200 rounded-full animate-sparkle"
-            style={{ animationDelay: "0.5s" }}
-          ></div>
-          <div
-            className="absolute bottom-20 left-1/3 w-2 h-2 bg-white rounded-full animate-sparkle"
-            style={{ animationDelay: "1s" }}
-          ></div>
-          <div
-            className="absolute bottom-32 right-20 w-3 h-3 bg-yellow-300 rounded-full animate-sparkle"
-            style={{ animationDelay: "1.5s" }}
-          ></div>
-
-          {/* Shimmer Line Top */}
-          <div className="absolute top-0 left-0 right-0 h-px overflow-hidden">
-            <div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer"
-              style={{ backgroundSize: "200% 100%" }}
-            ></div>
-          </div>
-
-          {/* Shimmer Line Bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-px overflow-hidden">
-            <div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent animate-shimmer"
-              style={{ backgroundSize: "200% 100%", animationDelay: "1.5s" }}
-            ></div>
-          </div>
-
-          {/* === ANIMASI LOGO MELAYANG === */}
-          {/* Logo Kanan Atas - Enhanced */}
-          <div
-            className="absolute top-6 right-6 md:top-10 md:right-12 animate-bounce-in z-20"
+            className="hidden md:block absolute top-6 right-6 md:top-10 md:right-12 animate-bounce-in z-20"
             style={{ animationDelay: "0.2s" }}
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-white/50 rounded-full blur-md animate-pulse-ring"></div>
-              <div className="relative bg-gradient-to-br from-white to-red-50 text-red-600 font-black text-xs md:text-sm px-4 py-1.5 rounded-full shadow-lg transform rotate-12 border-2 border-red-100 animate-glow group-hover:rotate-0 transition-transform duration-300">
+            <div className="relative group/badge">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-lg opacity-60 animate-pulse-ring"></div>
+              <div className="relative bg-gradient-to-br from-purple-500 to-pink-600 text-white font-black text-xs md:text-sm px-4 md:px-5 py-1.5 md:py-2 rounded-full shadow-2xl transform rotate-12 border border-purple-300/30 animate-glow group-hover/badge:rotate-0 transition-transform duration-300 backdrop-blur-sm">
                 SALE! 🔥
               </div>
             </div>
           </div>
 
-          {/* Logo Kiri Bawah - Enhanced */}
+          {/* Bottom Left Badge - Hidden on mobile */}
           <div
-            className="absolute bottom-6 left-6 md:bottom-10 md:left-12 animate-bounce-in z-20"
+            className="hidden md:block absolute bottom-6 left-6 md:bottom-10 md:left-12 animate-bounce-in z-20"
             style={{ animationDelay: "0.4s" }}
           >
-            <div className="relative">
+            <div className="relative group/badge">
               <div
-                className="absolute inset-0 bg-white/50 rounded-full blur-md animate-pulse-ring"
+                className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-full blur-lg opacity-60 animate-pulse-ring"
                 style={{ animationDelay: "1s" }}
               ></div>
-              <div className="relative bg-gradient-to-br from-white to-yellow-50 text-red-600 font-black text-xs md:text-sm px-4 py-1.5 rounded-full shadow-lg transform -rotate-12 border-2 border-red-100 animate-glow group-hover:rotate-0 transition-transform duration-300">
+              <div className="relative bg-gradient-to-br from-cyan-500 to-purple-600 text-white font-black text-xs md:text-sm px-4 md:px-5 py-1.5 md:py-2 rounded-full shadow-2xl transform -rotate-12 border border-cyan-300/30 animate-glow group-hover/badge:rotate-0 transition-transform duration-300">
                 HOT DEALS ⚡
               </div>
             </div>
           </div>
 
-          {/* Logo Top Center - New */}
+          {/* Top Center Badge - Smaller on mobile */}
           <div
-            className="absolute top-6 left-1/2 -translate-x-1/2 animate-bounce-in z-20"
+            className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 animate-bounce-in z-20"
             style={{ animationDelay: "0.6s" }}
           >
             <div className="relative">
               <div
-                className="absolute inset-0 bg-yellow-300/50 rounded-full blur-md animate-pulse-ring"
+                className="absolute inset-0 bg-gradient-to-r from-orange-400 to-pink-500 rounded-full blur-md opacity-70 animate-pulse-ring"
                 style={{ animationDelay: "0.5s" }}
               ></div>
-              <div className="relative bg-gradient-to-br from-yellow-300 to-orange-400 text-red-700 font-black text-xs px-3 py-1 rounded-full shadow-lg animate-wiggle">
-                30% OFF
+              <div className="relative bg-gradient-to-br from-orange-400 to-pink-500 text-white font-black text-[10px] md:text-xs px-3 md:px-4 py-1 md:py-1.5 rounded-full shadow-xl animate-wiggle border border-orange-200/30">
+                UP TO 50% OFF
               </div>
             </div>
           </div>
 
           {/* Main Content */}
           <div className="relative z-10">
-            {/* Badge */}
-            <div className="animate-scale-in mb-4">
-              <span className="relative inline-block bg-white text-red-600 text-xs font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-lg">
-                <span className="absolute inset-0 bg-white rounded-full blur-sm animate-pulse"></span>
-                <span className="relative flex items-center gap-2">
+            {/* Badge - Responsive size */}
+            <div className="animate-scale-in mb-4 md:mb-6">
+              <span className="relative inline-block bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-xl text-purple-300 text-[10px] md:text-xs font-black px-4 md:px-6 py-2 md:py-2.5 rounded-full uppercase tracking-wider md:tracking-widest shadow-xl md:shadow-2xl border border-purple-400/30">
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-sm animate-pulse"></span>
+                <span className="relative flex items-center gap-1.5 md:gap-2">
                   <svg
-                    className="w-4 h-4 animate-spin"
+                    className="w-3 h-3 md:w-4 md:h-4 animate-spin text-purple-400"
                     style={{ animationDuration: "3s" }}
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -503,71 +464,86 @@ export default function Sale() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Limited Time Offer
+                  <span className="hidden sm:inline">Limited Time Offer</span>
+                  <span className="sm:hidden">Limited Offer</span>
                 </span>
               </span>
             </div>
 
-            {/* Main Title with Parallax Effect */}
+            {/* Main Title - Fully responsive */}
             <h1
-              className="text-4xl md:text-6xl lg:text-7xl font-black italic tracking-tighter mb-6 drop-shadow-2xl animate-slide-in"
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4 md:mb-8 drop-shadow-2xl animate-slide-in"
               style={{
-                transform: `translate(${mousePosition.x * 10}px, ${
-                  mousePosition.y * 10
-                }px)`,
+                transform: `translate(${mousePosition.x * 4}px, ${mousePosition.y * 4}px)`,
                 transition: "transform 0.3s ease-out",
               }}
             >
-              MID-SEASON
-              <br />
+              <span className="block mb-1 md:mb-2 text-white">MID-SEASON</span>
               <span className="relative inline-block">
                 <span
-                  className="relative bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 via-white to-yellow-200 animate-shimmer"
+                  className="relative bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 animate-shimmer font-black italic"
                   style={{ backgroundSize: "200% auto" }}
                 >
-                  SALE
+                  MEGA SALE
                 </span>
-                {/* Glow effect under text */}
-                <div className="absolute -inset-1 bg-white/30 blur-xl -z-10 animate-pulse"></div>
+                {/* Neon Glow Effect */}
+                <div className="absolute -inset-1 md:-inset-2 bg-gradient-to-r from-purple-500/30 via-pink-500/30 to-cyan-500/30 blur-xl md:blur-2xl -z-10 animate-pulse"></div>
               </span>
             </h1>
 
-            {/* Description */}
+            {/* Description - Responsive text */}
             <p
-              className="text-white/95 text-base md:text-lg max-w-2xl mx-auto font-medium mb-8 leading-relaxed animate-scale-in"
+              className="text-gray-300 text-xs sm:text-sm md:text-base lg:text-xl max-w-3xl mx-auto font-medium mb-6 md:mb-10 leading-relaxed animate-scale-in px-4"
               style={{ animationDelay: "0.3s" }}
             >
               Get up to{" "}
               <span
-                className="inline-block bg-white text-red-600 font-black text-xl md:text-2xl px-3 py-1 rounded-lg shadow-lg animate-bounce-in mx-1"
+                className="inline-flex items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black text-base sm:text-lg md:text-2xl lg:text-3xl px-2.5 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg md:rounded-xl shadow-lg md:shadow-2xl shadow-purple-500/50 animate-bounce-in mx-0.5 md:mx-1 border border-purple-400/30"
                 style={{ animationDelay: "0.6s" }}
               >
-                30% OFF
+                50% OFF
               </span>{" "}
-              on selected premium sneakers from
-              <span className="font-black text-yellow-200">
+              <span className="hidden sm:inline">on selected premium sneakers from</span>
+              <span className="sm:hidden">on sneakers from</span>
+              <span className="font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {" "}
                 Nike, Adidas, Jordan
               </span>{" "}
-              and more!
+              <span className="hidden sm:inline">and more!</span>
             </p>
 
-            {/* CTA Button with Shine Effect */}
+            {/* CTA Button - Fully responsive */}
             <div
               className="animate-slide-in-right"
               style={{ animationDelay: "0.5s" }}
             >
-              <button className="group relative mt-4 px-10 py-4 bg-white text-red-600 font-black rounded-full text-sm uppercase tracking-widest shadow-2xl transition-all duration-300 hover:shadow-3xl active:scale-95 overflow-hidden">
+              <button className="group relative mt-2 md:mt-4 px-6 sm:px-8 md:px-12 py-3 sm:py-4 md:py-5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 text-white font-black rounded-lg sm:rounded-xl md:rounded-2xl text-[11px] sm:text-xs md:text-sm uppercase tracking-wide sm:tracking-wider md:tracking-widest shadow-lg md:shadow-2xl shadow-purple-500/50 transition-all duration-500 hover:shadow-purple-500/80 hover:scale-105 active:scale-95 overflow-hidden border border-purple-400/30">
+                {/* Animated Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
                 {/* Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-200/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
                 {/* Glow Ring */}
-                <div className="absolute inset-0 bg-white rounded-full blur-xl opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                <div className="absolute inset-0 bg-purple-500 rounded-lg sm:rounded-xl md:rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity"></div>
 
-                <span className="relative flex items-center justify-center gap-3">
-                  Shop Deals Now
+                <span className="relative flex items-center justify-center gap-2 md:gap-3">
                   <svg
-                    className="w-5 h-5 group-hover:translate-x-2 transition-transform"
+                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                  Shop Now
+                  <svg
+                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -598,7 +574,7 @@ export default function Sale() {
         ) : (
           <>
             {/* TAMPILKAN ITEM */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-16">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 mb-12 md:mb-16">
               {currentItems.map((item) => (
                 <SaleProductCard
                   key={item.id}
@@ -614,11 +590,10 @@ export default function Sale() {
                 <button
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === 1
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -640,11 +615,10 @@ export default function Sale() {
                   <button
                     key={index + 1}
                     onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${
-                      currentPage === index + 1
-                        ? "bg-black text-white shadow-lg transform scale-110"
-                        : "text-gray-500 hover:bg-gray-100"
-                    }`}
+                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
+                      ? "bg-black text-white shadow-lg transform scale-110"
+                      : "text-gray-500 hover:bg-gray-100"
+                      }`}
                   >
                     {index + 1}
                   </button>
@@ -653,11 +627,10 @@ export default function Sale() {
                 <button
                   onClick={() => paginate(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === totalPages
-                      ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                      : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
+                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
+                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

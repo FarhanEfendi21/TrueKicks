@@ -57,10 +57,9 @@ const ProductCard = ({ item, navigate, index }) => {
         hover:shadow-lg transition-all duration-700 ease-out 
         hover:-translate-y-1 cursor-pointer h-full flex flex-col justify-between group
         transform will-change-transform
-        ${
-          isVisible
-            ? "opacity-100 translate-y-0 scale-100"
-            : "opacity-0 translate-y-12 scale-95" // Ubah jarak sedikit agar lebih smooth di HP
+        ${isVisible
+          ? "opacity-100 translate-y-0 scale-100"
+          : "opacity-0 translate-y-12 scale-95" // Ubah jarak sedikit agar lebih smooth di HP
         }
       `}
     >
@@ -197,18 +196,37 @@ export default function Apparel() {
       <Navbar />
 
       <div className="pt-32 pb-20 max-w-7xl mx-auto px-6">
-        {/* === HEADER SECTION === */}
-        <div className="text-center mb-6">
-          <span className="text-[#FF5500] font-bold text-sm tracking-wider uppercase">
-            Streetwear Essentials
-          </span>
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mt-2 mb-4">
-            TRENDING APPAREL
-          </h1>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Elevate your style with our curated selection of hoodies, tees, and
-            jackets from top brands.
-          </p>
+        {/* ========================================================
+            MODERN SIMPLE BANNER - APPAREL
+        ======================================================== */}
+        <div className="relative bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 rounded-2xl md:rounded-3xl p-8 md:p-14 mb-6 md:mb-10 text-center overflow-hidden">
+          {/* Gradient Accent Line - Top */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
+
+          {/* Subtle Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[400px] md:h-[400px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          {/* Content */}
+          <div className="relative z-10">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 px-4 py-1.5 rounded-full mb-4 md:mb-5">
+              <div className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse"></div>
+              <span className="text-cyan-400 font-semibold text-[11px] md:text-xs tracking-wider uppercase">Streetwear Essentials</span>
+            </div>
+
+            {/* Title */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-3 md:mb-4 tracking-tight">
+              TRENDING <span className="text-cyan-400">APPAREL</span>
+            </h1>
+
+            {/* Description */}
+            <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto leading-relaxed">
+              Elevate your style with hoodies, tees & jackets from top brands.
+            </p>
+          </div>
+
+          {/* Gradient Accent Line - Bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
         </div>
 
         {/* 1. CONTAINER UTAMA (Compact Spacing) */}
@@ -220,11 +238,10 @@ export default function Apparel() {
               className="group flex items-center gap-3 text-gray-900 hover:text-orange-600 transition-colors"
             >
               <div
-                className={`p-2 rounded-full transition-colors ${
-                  showFilters
+                className={`p-2 rounded-full transition-colors ${showFilters
                     ? "bg-black text-white"
                     : "bg-gray-100 text-gray-600"
-                }`}
+                  }`}
               >
                 {/* Icon Filter Lines */}
                 <svg
@@ -262,9 +279,8 @@ export default function Apparel() {
 
           {/* 3. EXPANDABLE PANEL (Responsive Scroll) */}
           <div
-            className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              showFilters ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${showFilters ? "max-h-[300px] opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <div className="bg-white p-4 md:p-6 rounded-[1.5rem] md:rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-100/50">
               {/* Header Kategori */}
@@ -282,13 +298,12 @@ export default function Apparel() {
                       className={`
                                         flex-shrink-0 snap-start
                                         px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 border whitespace-nowrap
-                                        ${
-                                          isActive
-                                            ? /* Active: Solid Black (Sesuai tema Category) */
-                                              "bg-black text-white border-black shadow-lg shadow-black/20 transform scale-105"
-                                            : /* Inactive: Clean White */
-                                              "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
-                                        }
+                                        ${isActive
+                          ? /* Active: Solid Black (Sesuai tema Category) */
+                          "bg-black text-white border-black shadow-lg shadow-black/20 transform scale-105"
+                          : /* Inactive: Clean White */
+                          "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300"
+                        }
                                     `}
                     >
                       {cat}
@@ -325,11 +340,10 @@ export default function Apparel() {
                 <button
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === 1
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
                       ? "text-gray-300 border-gray-200 cursor-not-allowed"
                       : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -352,11 +366,10 @@ export default function Apparel() {
                   <button
                     key={index + 1}
                     onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${
-                      currentPage === index + 1
+                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
                         ? "bg-black text-white shadow-lg transform scale-110"
                         : "text-gray-500 hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     {index + 1}
                   </button>
@@ -366,11 +379,10 @@ export default function Apparel() {
                 <button
                   onClick={() => paginate(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                    currentPage === totalPages
+                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
                       ? "text-gray-300 border-gray-200 cursor-not-allowed"
                       : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                  }`}
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -29,27 +29,28 @@ export default function BottomNav() {
   // Cek apakah route aktif
   const isActive = (path) => location.pathname === path;
 
+  // Sembunyikan BottomNav di halaman Checkout
+  if (location.pathname === "/checkout") return null;
+
   return (
     <>
       {/* 1. DARK OVERLAY */}
       <div
         className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 md:hidden
-        ${
-          showMenu
+        ${showMenu
             ? "opacity-100 visible"
             : "opacity-0 invisible pointer-events-none"
-        }`}
+          }`}
       />
 
       {/* 2. MENU OVERLAY (POPUP CONTENT) - UPDATE ICONS */}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`fixed bottom-28 left-1/2 -translate-x-1/2 w-[90%] max-w-sm z-50 transition-all duration-500 cubic-bezier(0.175, 0.885, 0.32, 1.275) origin-bottom md:hidden
-        ${
-          showMenu
+        ${showMenu
             ? "translate-y-0 opacity-100 scale-100"
             : "translate-y-10 opacity-0 scale-90 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="bg-[#1A1A1A] border border-white/10 rounded-3xl p-5 shadow-2xl shadow-black/50 overflow-hidden relative">
           <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF5500]/10 blur-3xl rounded-full pointer-events-none"></div>
@@ -95,9 +96,8 @@ export default function BottomNav() {
           3. FLOATING CART BUTTON (PREMIUM GLOW STYLE)
          ================================================================== */}
       <div
-        className={`fixed bottom-28 right-6 z-40 md:hidden transition-all duration-300 ${
-          showMenu ? "blur-sm opacity-50" : "opacity-100"
-        }`}
+        className={`fixed bottom-28 right-6 z-40 md:hidden transition-all duration-300 ${showMenu ? "blur-sm opacity-50" : "opacity-100"
+          }`}
       >
         <button
           onClick={() => navigate("/cart")}
@@ -157,11 +157,10 @@ export default function BottomNav() {
                 setShowMenu(!showMenu);
               }}
               className={`w-16 h-16 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(255,85,0,0.4)] transition-all duration-300 border-4 border-[#121212] group
-                    ${
-                      showMenu
-                        ? "bg-white text-black rotate-45 scale-95"
-                        : "bg-[#FF5500] text-white rotate-0 hover:scale-105"
-                    }`}
+                    ${showMenu
+                  ? "bg-white text-black rotate-45 scale-95"
+                  : "bg-[#FF5500] text-white rotate-0 hover:scale-105"
+                }`}
             >
               {/* Menggunakan icon plus yang lebih tebal (RiAddFill) */}
               <RiAddFill className="w-9 h-9 transition-transform group-hover:rotate-90 duration-300" />
@@ -193,15 +192,13 @@ function NavIcon({ active, onClick, IconOutline, IconFilled }) {
       // Gunakan 'group' untuk hover effect
       // Warna inactive diubah jadi gray-400 agar lebih subtle
       className={`flex flex-col items-center justify-center w-12 h-12 transition-all duration-300 group relative
-             ${
-               active ? "text-[#FF5500]" : "text-gray-400 hover:text-gray-200"
-             }`}
+             ${active ? "text-[#FF5500]" : "text-gray-400 hover:text-gray-200"
+        }`}
     >
       {/* Container Icon dengan animasi scale */}
       <div
-        className={`transition-transform duration-300 ${
-          active ? "scale-110" : "group-hover:scale-105"
-        }`}
+        className={`transition-transform duration-300 ${active ? "scale-110" : "group-hover:scale-105"
+          }`}
       >
         {active ? (
           // Render Icon Solid jika aktif
@@ -227,32 +224,28 @@ function MenuButton({ icon, title, subtitle, onClick, highlight }) {
     <button
       onClick={onClick}
       className={`flex items-center gap-3 p-3 rounded-2xl text-left transition-all active:scale-95 border group
-            ${
-              highlight
-                ? "bg-gradient-to-r from-[#FF5500] to-orange-600 border-transparent text-white shadow-lg"
-                : "bg-white/5 border-white/5 hover:bg-white/10 text-gray-300 hover:text-white"
-            }`}
+            ${highlight
+          ? "bg-gradient-to-r from-[#FF5500] to-orange-600 border-transparent text-white shadow-lg"
+          : "bg-white/5 border-white/5 hover:bg-white/10 text-gray-300 hover:text-white"
+        }`}
     >
       {/* Render icon component */}
       <span
-        className={`text-2xl transition-transform group-hover:scale-110 ${
-          highlight ? "text-white" : "text-gray-400 group-hover:text-[#FF5500]"
-        }`}
+        className={`text-2xl transition-transform group-hover:scale-110 ${highlight ? "text-white" : "text-gray-400 group-hover:text-[#FF5500]"
+          }`}
       >
         {icon}
       </span>
       <div>
         <span
-          className={`block font-bold text-sm ${
-            highlight ? "text-white" : "text-gray-200"
-          }`}
+          className={`block font-bold text-sm ${highlight ? "text-white" : "text-gray-200"
+            }`}
         >
           {title}
         </span>
         <span
-          className={`block text-[10px] ${
-            highlight ? "text-white/80" : "text-gray-500"
-          }`}
+          className={`block text-[10px] ${highlight ? "text-white/80" : "text-gray-500"
+            }`}
         >
           {subtitle}
         </span>

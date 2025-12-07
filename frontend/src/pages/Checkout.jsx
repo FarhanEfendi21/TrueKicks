@@ -112,20 +112,48 @@ export default function Checkout() {
         }}
       />
 
-      <main className="pt-28 pb-32 md:pt-36 md:pb-20 max-w-6xl mx-auto px-4 md:px-8">
+      <main className="pt-28 pb-40 md:pt-36 md:pb-20 max-w-6xl mx-auto px-4 md:px-8">
         {/* Header */}
-        <div className="mb-8 md:mb-12 text-center md:text-left">
-          <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">
-            Checkout
-          </h1>
-          <p className="text-gray-500 text-sm mt-2">
+        {/* Header */}
+        <div className="mb-8 md:mb-12">
+          <div className="flex items-center gap-4 mb-2 md:mb-0">
+            {/* Back Button (Mobile Only) */}
+            <button
+              onClick={() => navigate(-1)}
+              className="md:hidden w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-900 active:scale-95 transition-all"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
+            </button>
+
+            <div className="text-left flex-1">
+              <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight uppercase">
+                Checkout
+              </h1>
+            </div>
+          </div>
+
+          <p className="text-gray-500 text-sm mt-1 text-left md:text-left ml-14 md:ml-0">
             Please provide your delivery details to complete the order.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* === KIRI: FORMULIR PENGIRIMAN === */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
+          {/* Mobile: Order 1 (First), Desktop: Order 1 (Left) */}
+          <div className="lg:col-span-7 order-1">
             <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-gray-100">
               <h2 className="font-bold text-xl mb-6 flex items-center gap-3 pb-4 border-b border-gray-100">
                 <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm">
@@ -139,7 +167,7 @@ export default function Checkout() {
                 onSubmit={handlePayment}
                 className="space-y-5 md:space-y-6"
               >
-                {/* Full Name & Phone (Grid di Desktop, Stack di Mobile) */}
+                {/* Full Name & Phone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="relative">
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">
@@ -244,7 +272,7 @@ export default function Checkout() {
                 </div>
 
                 {/* City & Postal Code */}
-                <div className="grid grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="relative">
                     <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 ml-1">
                       City
@@ -277,7 +305,8 @@ export default function Checkout() {
           </div>
 
           {/* === KANAN: RINGKASAN PESANAN (Sticky di Desktop) === */}
-          <div className="lg:col-span-5 order-1 lg:order-2">
+          {/* Mobile: Order 2 (Second), Desktop: Order 2 (Right) */}
+          <div className="lg:col-span-5 order-2">
             <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-lg border border-gray-100 lg:sticky lg:top-32">
               <h2 className="font-bold text-xl mb-6 flex items-center justify-between">
                 Order Summary
@@ -345,9 +374,8 @@ export default function Checkout() {
                 form="checkout-form"
                 type="submit"
                 disabled={loading}
-                className={`hidden md:flex w-full mt-8 bg-black text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-[#FF5500] hover:shadow-orange-500/30 transition-all active:scale-95 shadow-lg justify-center items-center gap-3 group ${
-                  loading ? "opacity-70 cursor-not-allowed" : ""
-                }`}
+                className={`hidden md:flex w-full mt-8 bg-black text-white py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-[#FF5500] hover:shadow-orange-500/30 transition-all active:scale-95 shadow-lg justify-center items-center gap-3 group ${loading ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
               >
                 {loading ? "Processing Payment..." : "Place Order Now"}
                 {!loading && (
@@ -390,7 +418,7 @@ export default function Checkout() {
 
       {/* === MOBILE STICKY CHECKOUT BAR (Hanya di Mobile) === */}
       {/* UX Terbaik untuk Mobile: Total harga dan tombol bayar selalu terlihat di bawah */}
-      <div className="md:hidden fixed bottom-[70px] left-0 right-0 bg-white/95 backdrop-blur-md p-4 border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-40">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-4 border-t border-gray-200 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-40 pb-6">
         <div className="flex justify-between items-center max-w-6xl mx-auto">
           <div className="flex flex-col">
             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
@@ -404,9 +432,8 @@ export default function Checkout() {
             form="checkout-form"
             type="submit"
             disabled={loading}
-            className={`bg-black text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg hover:bg-[#FF5500] active:scale-95 transition-all flex items-center gap-2 ${
-              loading ? "opacity-70" : ""
-            }`}
+            className={`bg-black text-white px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest shadow-lg hover:bg-[#FF5500] active:scale-95 transition-all flex items-center gap-2 ${loading ? "opacity-70" : ""
+              }`}
           >
             {loading ? (
               <>

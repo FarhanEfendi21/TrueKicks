@@ -7,7 +7,7 @@ import { useCart } from "../Context/CartContext";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function Checkout() {
-  const { cartItems, totalPrice, clearCart } = useCart();
+  const { cartItems, totalPrice, finalPrice, discount, clearCart } = useCart();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -77,7 +77,7 @@ export default function Checkout() {
         city: formData.city,
         postal_code: formData.postalCode,
         phone: formData.phone,
-        total_price: totalPrice,
+        total_price: finalPrice, // Use discounted price
         items: cartItems,
       };
 
@@ -358,13 +358,22 @@ export default function Checkout() {
                     Free Shipping
                   </span>
                 </div>
+                {/* Display Discount if applied */}
+                {discount.type && (
+                  <div className="flex justify-between text-sm font-medium text-green-600">
+                    <span>Discount ({discount.code})</span>
+                    <span className="font-bold">
+                      -{formatPrice(totalPrice - finalPrice)}
+                    </span>
+                  </div>
+                )}
                 {/* Bisa tambah Tax disini jika ada */}
                 <div className="flex justify-between items-end mt-6 pt-4 border-t border-gray-100">
                   <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
                     Total To Pay
                   </span>
                   <span className="text-2xl md:text-3xl font-black text-[#FF5500] leading-none">
-                    {formatPrice(totalPrice)}
+                    {formatPrice(finalPrice)}
                   </span>
                 </div>
               </div>

@@ -22,6 +22,24 @@ export default function Login() {
   // === FUNGSI UTAMA LOGIN & REGISTER ===
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // VALIDATION
+    if (activeTab === "signup" && !fullName.trim()) {
+      toast.error("Full Name is required");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     setIsLoading(true);
 
     try {

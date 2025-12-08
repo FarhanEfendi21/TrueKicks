@@ -62,6 +62,7 @@ export default function Profile() {
   const user = storedUser || { full_name: 'Guest', email: 'guest@truekicks.com' };
 
   const [editForm, setEditForm] = useState({ full_name: user.full_name });
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch Order History
   useEffect(() => {
@@ -127,11 +128,31 @@ export default function Profile() {
     localStorage.removeItem('profileImage');
   };
 
-  const handleSaveProfile = () => {
-    const updatedUser = { ...user, full_name: editForm.full_name };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    setShowEditModal(false);
-    window.location.reload();
+  const handleSaveProfile = async () => {
+    if (!editForm.full_name.trim()) {
+      alert("Name cannot be empty!");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const API_URL = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.put(`${API_URL}/api/users/${user.id}`, {
+        full_name: editForm.full_name.trim()
+      });
+
+      if (response.data.user) {
+        const updatedUser = { ...user, full_name: response.data.user.full_name };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setShowEditModal(false);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      alert(error.response?.data?.error || "Failed to update profile. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const getStatusColor = (status) => {

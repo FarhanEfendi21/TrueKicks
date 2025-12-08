@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Pagination from "../components/Pagination";
 
 // 1. CUSTOM HOOK: SCROLL ANIMATION
 // =========================================
@@ -585,70 +586,11 @@ export default function Sale() {
             </div>
 
             {/* PAGINATION CONTROLS */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 19.5L8.25 12l7.5-7.5"
-                    />
-                  </svg>
-                </button>
-
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
-                      ? "bg-black text-white shadow-lg transform scale-110"
-                      : "text-gray-500 hover:bg-gray-100"
-                      }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={paginate}
+            />
           </>
         )}
       </div>

@@ -98,12 +98,37 @@ export const CartProvider = ({ children }) => {
     );
   };
 
+  // State Diskon
+  const [discount, setDiscount] = useState({ type: null, value: 0, code: "" });
+
+  const applyCoupon = (couponData) => {
+    setDiscount({
+      type: couponData.discount_type,
+      value: couponData.discount_value,
+      code: couponData.code,
+    });
+  };
+
+  const removeCoupon = () => {
+    setDiscount({ type: null, value: 0, code: "" });
+  };
+
   // Hitung Total Harga & Total Item
   const totalPrice = cartItems.reduce((total, item) => {
     const price = parseFloat(item.price) || 0;
     const quantity = parseFloat(item.quantity) || 0;
     return total + price * quantity;
   }, 0);
+
+  // Hitung Final Price setelah Diskon
+  const discountAmount =
+    discount.type === "percent"
+      ? (totalPrice * discount.value) / 100
+      : discount.type === "fixed"
+        ? discount.value
+        : 0;
+
+  const finalPrice = Math.max(0, totalPrice - discountAmount);
 
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
@@ -113,6 +138,7 @@ export const CartProvider = ({ children }) => {
   // Fungsi Clear Cart (Hapus data user saat ini saja)
   const clearCart = () => {
     setCartItems([]);
+    setDiscount({ type: null, value: 0, code: "" }); // Reset diskon juga
     const userId = getCurrentUserId();
     if (userId) {
       localStorage.removeItem(`cartItems_${userId}`);
@@ -130,6 +156,10 @@ export const CartProvider = ({ children }) => {
         refreshCart,
         totalPrice,
         totalItems,
+        discount,
+        applyCoupon,
+        removeCoupon,
+        finalPrice,
       }}
     >
       {children}

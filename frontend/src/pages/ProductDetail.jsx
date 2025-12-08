@@ -7,6 +7,7 @@ import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
 import { supabase } from "../lib/supabaseClient";
 import toast, { Toaster } from "react-hot-toast";
+import SizeGuide from "../components/SizeGuide";
 
 // --- HELPER COMPONENTS (Tidak Berubah) ---
 
@@ -25,11 +26,10 @@ const StarRating = ({ rating, interactive = false, setRating }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill={star <= rating ? "#FACC15" : "#E5E7EB"}
-          className={`w-5 h-5 ${
-            interactive
-              ? "cursor-pointer hover:scale-110 transition-transform"
-              : ""
-          }`}
+          className={`w-5 h-5 ${interactive
+            ? "cursor-pointer hover:scale-110 transition-transform"
+            : ""
+            }`}
         >
           <path
             fillRule="evenodd"
@@ -53,9 +53,8 @@ const AccordionItem = ({ title, isOpen, onClick, children }) => {
           {title}
         </span>
         <span
-          className={`transform transition-transform duration-300 text-gray-400 group-hover:text-black ${
-            isOpen ? "rotate-45" : "rotate-0"
-          }`}
+          className={`transform transition-transform duration-300 text-gray-400 group-hover:text-black ${isOpen ? "rotate-45" : "rotate-0"
+            }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -74,11 +73,10 @@ const AccordionItem = ({ title, isOpen, onClick, children }) => {
         </span>
       </button>
       <div
-        className={`grid transition-all duration-500 ease-in-out ${
-          isOpen
-            ? "grid-rows-[1fr] opacity-100 mb-5"
-            : "grid-rows-[0fr] opacity-0"
-        }`}
+        className={`grid transition-all duration-500 ease-in-out ${isOpen
+          ? "grid-rows-[1fr] opacity-100 mb-5"
+          : "grid-rows-[0fr] opacity-0"
+          }`}
       >
         <div className="overflow-hidden text-gray-500 text-sm leading-relaxed">
           {children}
@@ -108,6 +106,8 @@ export default function ProductDetail() {
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(5);
   const [user, setUser] = useState(null);
+  const [showSizeGuide, setShowSizeGuide] = useState(false);
+  const [similarProducts, setSimilarProducts] = useState([]);
 
   const reviewsRef = useRef(null);
 
@@ -143,6 +143,7 @@ export default function ProductDetail() {
         name: product.name,
         price: product.price,
         image: product.image_url,
+        productType: type, // Include product type for navigation
       });
       toast.success(`${product.name} added to Wishlist!`); // --- NOTIFIKASI BARU ---
     }
@@ -221,7 +222,8 @@ export default function ProductDetail() {
     if (!newComment) return toast.error("Please write a comment"); // --- NOTIFIKASI BARU ---
 
     try {
-      const { error } = await supabase.from("reviews").insert({
+      const API_URL = import.meta.env.VITE_API_BASE_URL;
+      await axios.post(`${API_URL}/api/reviews`, {
         product_id: id,
         product_type: type,
         user_id: user.id,
@@ -229,13 +231,12 @@ export default function ProductDetail() {
         comment: newComment,
       });
 
-      if (error) throw error;
       setNewComment("");
       setNewRating(5);
       toast.success("Review submitted successfully!"); // --- NOTIFIKASI BARU ---
     } catch (error) {
-      console.error("Failed to submit review", error.message);
-      toast.error("Error submitting review. Check permission settings."); // --- NOTIFIKASI BARU ---
+      console.error("Failed to submit review", error);
+      toast.error("Error submitting review. Please try again."); // --- NOTIFIKASI BARU ---
     }
   };
 
@@ -272,21 +273,24 @@ export default function ProductDetail() {
         setProduct(productRes.data);
         setActiveImage(productRes.data.image_url);
 
-        // Bagian Supabase (Reviews) tetap aman karena pakai client Supabase langsung
-        const { data: reviewsData, error } = await supabase
-          .from("reviews")
-          .select(
-            `
-                *,
-                users ( full_name ) 
-            `
-          )
-          .eq("product_id", id)
-          .eq("product_type", type)
-          .order("created_at", { ascending: false });
+        // Bagian Reviews: Fetch dari Backend API
+        const reviewsRes = await axios.get(
+          `${API_URL}/api/reviews/${id}?type=${type}`
+        );
+        setReviews(reviewsRes.data || []);
 
-        if (error) throw error;
-        setReviews(reviewsData || []);
+        // === FETCH SIMILAR PRODUCTS ===
+        // Ambil produk dari tabel yang sama, limit 4, exclude ID saat ini
+        const { data: similarData } = await supabase
+          .from(type)
+          .select("*")
+          .neq("id", id) // Exclude current product
+          .limit(4);
+
+        // Optional: Filter by category if available (client-side or better query)
+        // For simplicity, just taking random 4 from same table
+        setSimilarProducts(similarData || []);
+
       } catch (error) {
         console.error("Gagal ambil data:", error);
       } finally {
@@ -338,9 +342,9 @@ export default function ProductDetail() {
   const averageRating =
     reviews.length > 0
       ? (
-          reviews.reduce((acc, review) => acc + review.rating, 0) /
-          reviews.length
-        ).toFixed(1)
+        reviews.reduce((acc, review) => acc + review.rating, 0) /
+        reviews.length
+      ).toFixed(1)
       : 0;
 
   if (loading)
@@ -412,12 +416,12 @@ export default function ProductDetail() {
             {type === "sale_products"
               ? "SALE"
               : type === "products"
-              ? product.category
+                ? product.category
                   ?.toLowerCase()
                   .match(/hoodie|shirt|jacket|pants|jersey/)
-                ? "APPAREL"
-                : "SNEAKERS"
-              : type}
+                  ? "APPAREL"
+                  : "SNEAKERS"
+                : type}
           </span>
 
           <span className="text-gray-300">/</span>
@@ -456,11 +460,10 @@ export default function ProductDetail() {
                       className={`
           relative flex-shrink-0 cursor-pointer transition-all duration-300 ease-out snap-start 
           w-20 h-20 md:w-24 md:h-24 rounded-2xl flex items-center justify-center overflow-hidden border-2 p-[2px]
-          ${
-            isActive
-              ? "bg-white border-black shadow-md scale-100 opacity-100"
-              : "bg-[#F8F8F8] border-transparent hover:border-gray-300 opacity-70 hover:opacity-100 hover:bg-white"
-          }
+          ${isActive
+                          ? "bg-white border-black shadow-md scale-100 opacity-100"
+                          : "bg-[#F8F8F8] border-transparent hover:border-gray-300 opacity-70 hover:opacity-100 hover:bg-white"
+                        }
         `}
                     >
                       {/* Inner Container untuk Gambar - memastikan background putih bersih di dalam border */}
@@ -528,7 +531,10 @@ export default function ProductDetail() {
                 <span className="font-bold text-sm uppercase tracking-wider text-gray-900">
                   {type === "apparel" ? "Select Size" : "Select Size (EU)"}
                 </span>
-                <button className="text-xs font-medium text-gray-500 underline underline-offset-4 hover:text-black transition-colors">
+                <button
+                  onClick={() => setShowSizeGuide(true)}
+                  className="text-xs font-medium text-gray-500 underline underline-offset-4 hover:text-black transition-colors"
+                >
                   Size Guide
                 </button>
               </div>
@@ -545,10 +551,9 @@ export default function ProductDetail() {
                       // disabled={!user && !isSelected}
 
                       className={`h-14 rounded-xl border-2 text-sm font-bold transition-all duration-200 relative overflow-hidden active:scale-95
-                        ${
-                          isSelected
-                            ? "bg-black text-white border-black shadow-md transform scale-[1.02]"
-                            : "bg-white text-gray-900 border-gray-200 hover:border-black hover:bg-gray-50"
+                        ${isSelected
+                          ? "bg-black text-white border-black shadow-md transform scale-[1.02]"
+                          : "bg-white text-gray-900 border-gray-200 hover:border-black hover:bg-gray-50"
                         }`}
                     >
                       {size}
@@ -599,11 +604,10 @@ export default function ProductDetail() {
                   onClick={handleAddToCart}
                   disabled={!user || !selectedSize}
                   className={`flex-1 text-white h-14 md:h-16 rounded-full font-bold text-[10px] md:text-sm uppercase tracking-wider transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 md:gap-3 group relative overflow-hidden shadow-md md:shadow-none
-                        ${
-                          !user || !selectedSize
-                            ? "bg-gray-400 cursor-not-allowed opacity-70"
-                            : "bg-gradient-to-r from-gray-900 to-black hover:shadow-lg hover:shadow-black/30"
-                        }`}
+                        ${!user || !selectedSize
+                      ? "bg-gray-400 cursor-not-allowed opacity-70"
+                      : "bg-gradient-to-r from-gray-900 to-black hover:shadow-lg hover:shadow-black/30"
+                    }`}
                 >
                   <span className="relative z-10 whitespace-nowrap">
                     {!user ? "Login Required" : "Add to Bag"}
@@ -629,13 +633,12 @@ export default function ProductDetail() {
                   onClick={handleWishlistToggle}
                   disabled={!user}
                   className={`w-14 h-14 md:w-16 md:h-16 border-2 rounded-full flex items-center justify-center transition-all duration-300 active:scale-90 group flex-shrink-0
-                        ${
-                          !user
-                            ? "border-gray-200 text-gray-300 opacity-60 cursor-not-allowed"
-                            : isLiked
-                            ? "border-red-500 bg-red-50 text-red-500"
-                            : "border-gray-200 text-gray-400 hover:border-red-500 hover:text-red-500 hover:bg-red-50"
-                        }`}
+                        ${!user
+                      ? "border-gray-200 text-gray-300 opacity-60 cursor-not-allowed"
+                      : isLiked
+                        ? "border-red-500 bg-red-50 text-red-500"
+                        : "border-gray-200 text-gray-400 hover:border-red-500 hover:text-red-500 hover:bg-red-50"
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -811,6 +814,41 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        {/* === RECOMMENDATIONS SECTION === */}
+        {similarProducts.length > 0 && (
+          <div className="mt-20 md:mt-32 border-t border-gray-100 pt-16">
+            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-8 tracking-tight uppercase">
+              You Might Also Like
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {similarProducts.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    navigate(`/product/${type}/${item.id}`);
+                    window.scrollTo(0, 0);
+                  }}
+                  className="group cursor-pointer"
+                >
+                  <div className="bg-gray-50 rounded-3xl aspect-square flex items-center justify-center p-4 mb-4 relative overflow-hidden transition-all duration-500 hover:shadow-lg">
+                    <img
+                      src={item.image_url}
+                      alt={item.name}
+                      className="w-[85%] h-[85%] object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3"
+                    />
+                  </div>
+                  <h4 className="font-bold text-sm md:text-base text-gray-900 line-clamp-1 group-hover:text-[#FF5500] transition-colors">
+                    {item.name}
+                  </h4>
+                  <p className="text-xs text-gray-500 font-medium mt-1">
+                    Rp {(item.price / 1000).toLocaleString()}K
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
       <Footer />
       <Toaster
@@ -846,8 +884,14 @@ export default function ProductDetail() {
             },
           },
         }}
-      />{" "}
-      {/* --- TOASTER COMPONENT BARU --- */}
+      />
+
+      {/* SIZE GUIDE MODAL */}
+      <SizeGuide
+        isOpen={showSizeGuide}
+        onClose={() => setShowSizeGuide(false)}
+        type={isApparel ? "apparel" : "sneakers"}
+      />
     </div>
   );
 }

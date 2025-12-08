@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import SneakersBanner from "../components/SneakersBanner";
 import { supabase } from "../lib/supabaseClient";
+import Pagination from "../components/Pagination";
 
 const useScrollAnimation = () => {
   const elementRef = useRef(null);
@@ -307,7 +308,7 @@ export default function Sneakers() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-poppins transition-colors duration-300">
-      <Navbar />     {" "}
+      <Navbar />
       <div className="pt-24 md:pt-32 pb-32 md:pb-20 max-w-7xl mx-auto px-4 md:px-6">
 
         {/* TRUEKICKS BANNER - BACK IN BLACK STYLE */}
@@ -469,77 +470,11 @@ export default function Sneakers() {
               ))}
             </div>
             {/* === PAGINATION CONTROLS === */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                {/* Tombol Previous */}
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 19.5L8.25 12l7.5-7.5"
-                    />
-                  </svg>
-                </button>
-                {/* Angka Halaman */}
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
-                      ? "bg-black text-white shadow-lg transform scale-110"
-                      : "text-gray-500 hover:bg-gray-100"
-                      }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-                {/* Tombol Next */}                 {" "}
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  {" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    {" "}
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                    {" "}
-                  </svg>
-                  {" "}
-                </button>
-                {" "}
-              </div>
-            )}
-            {" "}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={paginate}
+            />
           </>
         ) : (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-300">
@@ -549,17 +484,17 @@ export default function Sneakers() {
             </p>
             {" "}
             <button
-              onClick={() => handleFilter("All")}
+              onClick={() => handleBrandFilter("All")}
               className="mt-4 text-[#FF5500] font-bold hover:underline"
             >
-              View All Sneakers                {" "}
+              View All Sneakers
             </button>
             {" "}
           </div>
         )}
         {" "}
       </div>
-      <Footer />   {" "}
+      <Footer />
     </div>
   );
 }

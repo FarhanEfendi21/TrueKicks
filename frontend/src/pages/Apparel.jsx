@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ApparelBanner from "../components/ApparelBanner";
+import Pagination from "../components/Pagination";
 
 // =========================================
 // 1. CUSTOM HOOK: SCROLL ANIMATION
@@ -120,6 +121,8 @@ const ProductCard = ({ item, navigate, index }) => {
 // MAIN COMPONENT: APPAREL
 // =========================================
 export default function Apparel() {
+  const location = useLocation();
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -164,17 +167,40 @@ export default function Apparel() {
     fetchApparel();
   }, []);
 
-  // Filter Lokal (Tab Kategori di Frontend)
+  // Handle location state (from search bar)
+  useEffect(() => {
+    if (location.state?.keyword) {
+      setSearchKeyword(location.state.keyword);
+      setActiveCategory("All");
+    }
+  }, [location.state]);
+
+  // Apply filter when keyword or category changes
+  useEffect(() => {
+    let result = products;
+
+    // Filter by category
+    if (activeCategory !== "All") {
+      result = result.filter((item) => item.category === activeCategory);
+    }
+
+    // Filter by search keyword (name only)
+    if (searchKeyword) {
+      const lowerKeyword = searchKeyword.toLowerCase();
+      result = result.filter((item) =>
+        (item.name || "").toLowerCase().includes(lowerKeyword)
+      );
+    }
+
+    setFilteredProducts(result);
+    setCurrentPage(1);
+  }, [products, activeCategory, searchKeyword]);
+
+  // Filter by category tab
   const handleFilter = (category) => {
     setActiveCategory(category);
-    setCurrentPage(1); // Reset ke halaman 1 saat filter berubah
-
-    if (category === "All") {
-      setFilteredProducts(products);
-    } else {
-      const filtered = products.filter((item) => item.category === category);
-      setFilteredProducts(filtered);
-    }
+    setSearchKeyword(""); // Clear search when changing category
+    setCurrentPage(1);
   };
 
   // --- LOGIKA PAGINATION ---
@@ -305,73 +331,11 @@ export default function Apparel() {
             </div>
 
             {/* === PAGINATION CONTROLS === */}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2">
-                {/* Tombol Previous */}
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === 1
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 19.5L8.25 12l7.5-7.5"
-                    />
-                  </svg>
-                </button>
-
-                {/* Angka Halaman */}
-                {[...Array(totalPages)].map((_, index) => (
-                  <button
-                    key={index + 1}
-                    onClick={() => paginate(index + 1)}
-                    className={`w-10 h-10 rounded-full font-bold text-sm transition-all ${currentPage === index + 1
-                      ? "bg-black text-white shadow-lg transform scale-110"
-                      : "text-gray-500 hover:bg-gray-100"
-                      }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-
-                {/* Tombol Next */}
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${currentPage === totalPages
-                    ? "text-gray-300 border-gray-200 cursor-not-allowed"
-                    : "text-gray-600 border-gray-300 hover:bg-black hover:text-white hover:border-black"
-                    }`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                </button>
-              </div>
-            )}
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={paginate}
+            />
           </>
         ) : (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-300">

@@ -19,6 +19,8 @@ import Sale from "./pages/Sale.jsx";
 import Cart from "./pages/Cart.jsx";
 import Wishlist from "./pages/Wishlist.jsx";
 import Checkout from "./pages/Checkout.jsx";
+import OrderHistory from "./pages/OrderHistory.jsx";
+import Search from "./pages/Search.jsx";
 
 function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
@@ -90,6 +92,8 @@ function App() {
                 <Route path="/product/:type/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/orders" element={<OrderHistory />} />
+                <Route path="/search" element={<Search />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>
             </Routes>

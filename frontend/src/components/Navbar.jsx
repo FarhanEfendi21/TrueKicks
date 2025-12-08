@@ -4,6 +4,7 @@ import { HiOutlineHeart, HiHeart } from "react-icons/hi2";
 
 import { useCart } from "../Context/CartContext";
 import { useWishlist } from "../Context/WishlistContext";
+import SearchBar from "./SearchBar";
 
 
 const catalogCategories = [
@@ -54,6 +55,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showCatalog, setShowCatalog] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const [user, setUser] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
@@ -237,8 +239,12 @@ export default function Navbar() {
           {/* ==================================================
              ACTION BUTTONS (RIGHT)
           ================================================== */}
-          <div className="flex items-center gap-3 md:gap-5 flex-shrink-0 z-20">
+          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0 z-20">
 
+            {/* === SEARCH BAR === */}
+            <div className="hidden md:block">
+              <SearchBar />
+            </div>
 
             {/* === WISHLIST BUTTON (MODERN STYLE) === */}
             <div className="relative hidden md:block">
@@ -313,7 +319,7 @@ export default function Navbar() {
                         <div
                           key={item.id}
                           onClick={() => {
-                            navigate(`/product/sneakers/${item.id}`); // Arahkan ke detail
+                            navigate(`/product/${item.productType || 'sneakers'}/${item.id}`);
                             setShowWishlist(false);
                           }}
                           className="flex gap-3 p-2 hover:bg-gray-50 rounded-xl cursor-pointer group transition-colors"
@@ -415,20 +421,15 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* USER */}
+            {/* USER DROPDOWN */}
             {user ? (
-              <div className="hidden md:flex items-center gap-2">
-                <Link
-                  to="/profile"
+              <div className="relative hidden md:block">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
                   className="group flex items-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full pl-1 pr-3 py-1 transition-all duration-200"
                 >
-                  {/* Profile Picture Circle */}
                   <div className="relative">
-                    <div
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF5500] to-orange-600 
-                                    flex items-center justify-center text-white text-xs font-bold 
-                                    ring-2 ring-white dark:ring-gray-800 overflow-hidden"
-                    >
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF5500] to-orange-600 flex items-center justify-center text-white text-xs font-bold ring-2 ring-white dark:ring-gray-800 overflow-hidden">
                       {profileImage ? (
                         <img
                           src={profileImage}
@@ -438,25 +439,54 @@ export default function Navbar() {
                         getInitials(user.full_name)
                       )}
                     </div>
-                    {/* Online Indicator */}
                     <div className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white dark:border-gray-800" />
                   </div>
-
                   <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white">
                     {user.full_name?.split(" ")[0] || "User"}
                   </span>
-                </Link>
-
-                {/* Logout Button */}
-                <button
-                  onClick={handleLogout}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all"
-                  title="Logout"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className={`w-4 h-4 text-gray-400 transition-transform ${showUserMenu ? "rotate-180" : ""
+                      }`}
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 </button>
+
+                {/* DROPDOWN MENU */}
+                {showUserMenu && (
+                  <div className="absolute top-full right-0 mt-4 w-48 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden z-50 animate-fade-in origin-top-right ring-1 ring-black/5">
+                    <div className="p-2 space-y-1">
+                      <Link
+                        to="/profile"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-colors"
+                      >
+                        <span>👤</span> My Profile
+                      </Link>
+                      <Link
+                        to="/orders"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-black rounded-xl transition-colors"
+                      >
+                        <span>📦</span> My Orders
+                      </Link>
+                      <div className="h-px bg-gray-100 my-1"></div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition-colors text-left"
+                      >
+                        <span>🚪</span> Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <button

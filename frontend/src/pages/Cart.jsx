@@ -1,13 +1,49 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useCart } from "../Context/CartContext.jsx";
 
 export default function Cart() {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    totalPrice,
+    discount,
+    applyCoupon,
+    removeCoupon,
+    finalPrice,
+  } = useCart();
   const navigate = useNavigate();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [isCheckingCoupon, setIsCheckingCoupon] = useState(false);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setIsCheckingCoupon(true);
+    try {
+      // Force localhost for testing (your production backend may not have coupons table yet)
+      const API_URL = "http://localhost:5000";
+      console.log("Calling coupon API:", `${API_URL}/api/coupons/verify`);
+      const response = await axios.post(`${API_URL}/api/coupons/verify`, {
+        code: couponCode,
+        totalAmount: totalPrice,
+      });
+
+      applyCoupon(response.data);
+      toast.success("Coupon applied!");
+      setCouponCode("");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Invalid coupon");
+      removeCoupon();
+    } finally {
+      setIsCheckingCoupon(false);
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -263,9 +299,49 @@ export default function Cart() {
                     Free
                   </span>
                 </div>
+                {discount.type && (
+                  <div className="flex justify-between text-sm text-green-600 items-center animate-fade-in">
+                    <span className="flex items-center gap-1">
+                      Discount ({discount.code})
+                      <button
+                        onClick={removeCoupon}
+                        className="text-red-500 hover:text-red-700"
+                        title="Remove coupon"
+                      >
+                        ✕
+                      </button>
+                    </span>
+                    <span className="font-bold">
+                      -
+                      {formatPrice(
+                        totalPrice - finalPrice
+                      )}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm text-gray-500">
                   <span>Tax (Included)</span>
                   <span className="text-gray-900">-</span>
+                </div>
+              </div>
+
+              {/* PROMO CODE INPUT */}
+              <div className="mb-6">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    placeholder="Promo Code"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold uppercase placeholder:normal-case focus:outline-none focus:border-black transition-colors"
+                  />
+                  <button
+                    onClick={handleApplyCoupon}
+                    disabled={isCheckingCoupon || !couponCode}
+                    className="bg-gray-900 text-white px-4 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-black disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {isCheckingCoupon ? "..." : "Apply"}
+                  </button>
                 </div>
               </div>
 
@@ -277,7 +353,7 @@ export default function Cart() {
                   Total
                 </span>
                 <span className="font-black text-3xl text-gray-900 tracking-tight">
-                  {formatPrice(totalPrice)}
+                  {formatPrice(finalPrice)}
                 </span>
               </div>
 

@@ -26,9 +26,8 @@ export default function Cart() {
     if (!couponCode.trim()) return;
     setIsCheckingCoupon(true);
     try {
-      // Force localhost for testing (your production backend may not have coupons table yet)
-      const API_URL = "http://localhost:5000";
-      console.log("Calling coupon API:", `${API_URL}/api/coupons/verify`);
+      // Gunakan environment variable untuk produksi
+      const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
       const response = await axios.post(`${API_URL}/api/coupons/verify`, {
         code: couponCode,
         totalAmount: totalPrice,
@@ -325,24 +324,42 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* PROMO CODE INPUT */}
+              {/* PROMO CODE INPUT - Responsive */}
               <div className="mb-6">
-                <div className="flex gap-2">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+                  Kode Promo
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    placeholder="Promo Code"
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-bold uppercase placeholder:normal-case focus:outline-none focus:border-black transition-colors"
+                    placeholder="Masukkan kode promo"
+                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm font-bold uppercase placeholder:normal-case placeholder:text-gray-400 focus:outline-none focus:border-[#FF5500] focus:ring-2 focus:ring-orange-100 transition-all"
                   />
                   <button
                     onClick={handleApplyCoupon}
                     disabled={isCheckingCoupon || !couponCode}
-                    className="bg-gray-900 text-white px-4 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-black disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    className="w-full sm:w-auto bg-[#FF5500] text-white px-6 py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all active:scale-95 flex items-center justify-center gap-2"
                   >
-                    {isCheckingCoupon ? "..." : "Apply"}
+                    {isCheckingCoupon ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Cek...</span>
+                      </>
+                    ) : (
+                      "Gunakan"
+                    )}
                   </button>
                 </div>
+                {discount.type && (
+                  <p className="mt-2 text-xs text-green-600 font-medium flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Kupon {discount.code} berhasil diterapkan!
+                  </p>
+                )}
               </div>
 
               {/* Divider Garis Putus */}
